@@ -18,7 +18,9 @@ RUN composer dump-autoload --optimize --no-dev
 
 RUN printf "%s\n" "<VirtualHost *:80>" "    DocumentRoot /var/www/html/public" "" "    <Directory /var/www/html/public>" "        AllowOverride All" "        Require all granted" "    </Directory>" "" "    ErrorLog ${APACHE_LOG_DIR}/error.log" "    CustomLog ${APACHE_LOG_DIR}/access.log combined" "</VirtualHost>" > /etc/apache2/sites-available/000-default.conf
 
-RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html/writable
+RUN mkdir -p /var/www/html/writable/{cache,logs,session,uploads} \
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/writable
 
 EXPOSE 80
 
