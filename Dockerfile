@@ -1,8 +1,6 @@
 FROM php:8.1-apache
 
-RUN apt-get update && apt-get install -y \
-    libicu-dev \
-    libpq-dev \
+RUN apt-get update && apt-get install -y libicu-dev libpq-dev \
     && docker-php-ext-install intl pdo_pgsql pgsql \
     && rm -rf /var/lib/apt/lists/*
 
@@ -10,32 +8,17 @@ RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 
-COPY composer.json composer.lock* ./
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer install --no-dev --no-scripts --no-autoloader --prefer-dist \
-    || true
-
 COPY . .
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction 2>/dev/null || true
 
 RUN composer dump-autoload --optimize --no-dev
 
-RUN printf '%s\n' \
-    '<VirtualHost *:80>' \
-    '    DocumentRoot /var/www/html/public' \
-    '' \
-    '    <Directory /var/www/html/public>' \
-    '        AllowOverride All' \
-    '        Require all granted' \
-    '    </Directory>' \
-    '' \
-    '    ErrorLog ${APACHE_LOG_DIR}/error.log' \
-    '    CustomLog ${APACHE_LOG_DIR}/access.log combined' \
-    '</VirtualHost>' \
-    > /etc/apache2/sites-available/000-default.conf
+RUN printf "%s\n" "<VirtualHost *:80>" "    DocumentRoot /var/www/html/public" "" "    <Directory /var/www/html/public>" "        AllowOverride All" "        Require all granted" "    </Directory>" "" "    ErrorLog ${APACHE_LOG_DIR}/error.log" "    CustomLog ${APACHE_LOG_DIR}/access.log combined" "</VirtualHost>" > /etc/apache2/sites-available/000-default.conf
 
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/writable
+RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html/writable
 
 EXPOSE 80
 

@@ -7,7 +7,7 @@ writable/session/*
 writable/uploads/*
 node_modules
 .DS_Store
-docker
 README.md
 render.yaml
 Procfile
+docker
