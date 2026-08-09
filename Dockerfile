@@ -8,13 +8,11 @@ RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 
-COPY composer.json ./
+COPY . .
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer update --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction --no-progress
-
-COPY . .
+RUN composer update --no-dev --prefer-dist --no-interaction --no-progress
 
 RUN composer dump-autoload --optimize --no-dev
 

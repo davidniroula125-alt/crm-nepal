@@ -5,6 +5,7 @@ writable/logs/*
 writable/session/*
 writable/uploads/*
 node_modules
+vendor
 .DS_Store
 README.md
 render.yaml
