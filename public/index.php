@@ -1,22 +1,52 @@
 <?php
 
+use CodeIgniter\Boot;
+use Config\Paths;
+
+/*
+ *---------------------------------------------------------------
+ * CHECK PHP VERSION
+ *---------------------------------------------------------------
+ */
+
+$minPhpVersion = '8.2';
+if (version_compare(PHP_VERSION, $minPhpVersion, '<')) {
+    $message = sprintf(
+        'Your PHP version must be %s or higher to run CodeIgniter. Current version: %s',
+        $minPhpVersion,
+        PHP_VERSION,
+    );
+
+    header('HTTP/1.1 503 Service Unavailable.', true, 503);
+    echo $message;
+
+    exit(1);
+}
+
+/*
+ *---------------------------------------------------------------
+ * SET THE CURRENT DIRECTORY
+ *---------------------------------------------------------------
+ */
+
 // Path to the front controller (this file)
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 
 // Ensure the current directory is pointing to the front controller's directory
-chdir(FCPATH);
+if (getcwd() . DIRECTORY_SEPARATOR !== FCPATH) {
+    chdir(FCPATH);
+}
 
-// Load our paths config file
+/*
+ *---------------------------------------------------------------
+ * BOOTSTRAP THE APPLICATION
+ *---------------------------------------------------------------
+ */
+
 require FCPATH . '../app/Config/Paths.php';
 
-$paths = new Config\Paths();
+$paths = new Paths();
 
-// Location of the framework bootstrap file
-require rtrim($paths->systemDirectory, '\\/ ') . DIRECTORY_SEPARATOR . 'bootstrap.php';
+require $paths->systemDirectory . '/Boot.php';
 
-// Launch the application
-$app = \Config\Services::codeigniter();
-$app->initialize();
-$context = is_cli() ? 'php-cli' : 'web';
-$app->setContext($context);
-exit($app->run());
+exit(Boot::bootWeb($paths));

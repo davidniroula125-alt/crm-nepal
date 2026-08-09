@@ -9,7 +9,7 @@ class Security
     public string $cookieName = 'csrf_cookie';
     public int    $expire     = 7200;
     public bool   $regenerate = true;
-    public bool   $redirect   = false;
+    public bool   $redirect   = true;
     public string $samesite   = 'Lax';
     public array  $excludeURIs = [];
     public bool   $redirectAjax = false;

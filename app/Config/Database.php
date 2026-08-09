@@ -2,8 +2,6 @@
 
 namespace Config;
 
-use CodeIgniter\Database\Config;
-
 class Database
 {
     public string $defaultGroup = 'default';
@@ -20,8 +18,8 @@ class Database
         'db_debug' => (ENVIRONMENT !== 'production'),
         'cacheOn'  => false,
         'cacheDir' => '',
-        'charset'  => 'utf8',
-        'DBCollat' => 'utf8_general_ci',
+        'charset'  => 'utf8mb4',
+        'DBCollat' => 'utf8mb4_general_ci',
         'swapPre'  => '',
         'encrypt'  => false,
         'compress' => false,
@@ -42,8 +40,8 @@ class Database
         'db_debug' => true,
         'cacheOn'  => false,
         'cacheDir' => '',
-        'charset'  => 'utf8',
-        'DBCollat' => 'utf8_general_ci',
+        'charset'  => 'utf8mb4',
+        'DBCollat' => '',
         'swapPre'  => '',
         'encrypt'  => false,
         'compress' => false,
