@@ -12,7 +12,11 @@ COPY . .
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer update --no-dev --prefer-dist --no-interaction --no-progress
+RUN composer update --no-dev --prefer-dist --no-interaction --no-progress 2>&1 || \
+    (echo "COMPOSER UPDATE FAILED" && cat /tmp/composer.json 2>/dev/null && ls -la && exit 1)
+
+RUN ls -la vendor/codeigniter4/framework/system/bootstrap.php || \
+    (echo "VENDOR MISSING - listing vendor:" && ls -la vendor/ 2>/dev/null && exit 1)
 
 RUN composer dump-autoload --optimize --no-dev
 
