@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: crm-nepal
+    runtime: docker
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: CI_ENVIRONMENT
+        value: production
+      - key: DB_HOST
+        fromDatabase:
+          name: crm-nepal-db
+          property: host
+      - key: DB_NAME
+        fromDatabase:
+          name: crm-nepal-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: crm-nepal-db
+          property: username
+      - key: DB_PASS
+        fromDatabase:
+          name: crm-nepal-db
+          property: password
+      - key: DB_PORT
+        fromDatabase:
+          name: crm-nepal-db
+          property: port
+    healthCheckPath: /
+    autoDeploy: true
+
+databases:
+  - name: crm-nepal-db
+    plan: free
+    databaseName: crm_nepal

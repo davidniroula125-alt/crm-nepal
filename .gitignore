@@ -1,0 +1,9 @@
+vendor/
+writable/cache/*
+writable/session/*
+!writable/.gitkeep
+!writable/cache/.gitkeep
+!writable/session/.gitkeep
+.env
+.env.*
+!.env.example

@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+define('CI4_START', microtime(true));
+
+$paths = [
+    ROOTPATH,
+    APPPATH,
+    SYSDIR,
+];
+
+require ROOTPATH . 'system/bootstrap.php';
+
+$args = array_slice($argv, 1);
+
+return \CodeIgniter\CLI\CLI::run($args);

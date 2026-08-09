@@ -1,0 +1,30 @@
+{
+    "name": "crm-nepal/crm-nepal",
+    "description": "CRM Nepal - SaaS CRM for Nepali Businesses",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "codeigniter4/framework": "^4.5",
+        "ext-pdo_mysql": "*",
+        "ext-mbstring": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "CodeIgniter\\": "vendor/codeigniter4/framework/system/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@php spark cache:clear"
+        ]
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
