@@ -1,0 +1,38 @@
+/*
+  THEME / BRAND COLORS
+  ---------------------------------------------------------------
+  PLACEHOLDER PALETTE — replace with colors extracted from the real
+  logo.png. No logo file was provided yet, so these are a sensible
+  travel/CRM palette (deep teal + warm orange accent) standing in
+  until the real asset is supplied. Every color in the site should
+  reference these variables — nothing hard-coded — so swapping the
+  palette later is a one-file change.
+*/
+:root {
+  --color-primary: #0F6E63;       /* deep teal — headers, nav, primary buttons */
+  --color-primary-dark: #0A4F47;
+  --color-primary-light: #E4F3F1;
+
+  --color-accent: #F2994A;        /* warm orange — CTAs, highlights */
+  --color-accent-dark: #D97F2E;
+
+  --color-text: #1F2A2E;
+  --color-text-muted: #5B6B6E;
+  --color-bg: #FFFFFF;
+  --color-bg-alt: #F7FAF9;
+  --color-border: #E1E8E7;
+
+  --color-success: #2E9E5B;
+  --color-danger: #D64545;
+  --color-warning: #E0A72E;
+
+  --font-heading: 'Poppins', 'Segoe UI', sans-serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --shadow-sm: 0 1px 3px rgba(15, 110, 99, 0.08);
+  --shadow-md: 0 8px 24px rgba(15, 110, 99, 0.12);
+}

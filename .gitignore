@@ -1,0 +1,9 @@
+/vendor/
+/.env
+/writable/cache/*
+/writable/logs/*
+/writable/session/*
+/writable/uploads/*
+!/writable/cache/index.html
+node_modules/
+.DS_Store

@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: crm-nepal
+    runtime: image
+    plan: free
+    envVars:
+      - key: CI_ENVIRONMENT
+        value: production
+      - key: app.baseURL
+        sync: false
