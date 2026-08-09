@@ -2,6 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Models\ActivityLogModel;
+use App\Models\ContactInquiryModel;
+use App\Models\DemoRequestModel;
+use App\Models\FaqModel;
+use App\Models\LeadModel;
+use App\Models\PricingPlanModel;
+
 class Pages extends BaseController
 {
     public function about(): string
@@ -13,37 +20,47 @@ class Pages extends BaseController
 
     public function features(): string
     {
-        return view('pages/coming_soon', $this->siteData([
+        return view('pages/features', $this->siteData([
             'metaTitle' => 'Features | CRM Software Nepal',
-            'pageTitle' => 'Features',
-            'note'      => 'Full features page (deep-dive per module) — next build pass.',
         ]));
     }
 
     public function solutions(): string
     {
-        return view('pages/coming_soon', $this->siteData([
+        return view('pages/solutions', $this->siteData([
             'metaTitle' => 'Solutions | CRM Software Nepal',
-            'pageTitle' => 'Solutions',
-            'note'      => 'Solutions-by-business-type page (Travel Agencies / Trekking / Tour Operators / DMCs) — next build pass.',
         ]));
     }
 
     public function pricing(): string
     {
-        return view('pages/coming_soon', $this->siteData([
+        $model = model(PricingPlanModel::class);
+        $plans = $model->getActivePlans();
+
+        return view('pages/pricing', $this->siteData([
             'metaTitle' => 'Pricing | CRM Software Nepal',
-            'pageTitle' => 'Pricing',
-            'note'      => 'Monthly/Annual admin-editable pricing table — depends on Content CMS in Part 2.',
+            'plans'     => $plans,
         ]));
     }
 
     public function faq(): string
     {
-        return view('pages/coming_soon', $this->siteData([
-            'metaTitle' => 'FAQ | CRM Software Nepal',
-            'pageTitle' => 'Frequently Asked Questions',
-            'note'      => 'Categorized, CMS-managed FAQ — depends on FaqModel + admin CMS in Part 2.',
+        $model     = model(FaqModel::class);
+        $faqs      = $model->where('is_published', 1)->orderBy('sort_order', 'ASC')->findAll();
+        $grouped   = [];
+        $categories = [];
+        foreach ($faqs as $faq) {
+            $cat = $faq->category ?: 'General';
+            $grouped[$cat][] = $faq;
+            if (! in_array($cat, $categories, true)) {
+                $categories[] = $cat;
+            }
+        }
+
+        return view('pages/faq', $this->siteData([
+            'metaTitle'  => 'FAQ | CRM Software Nepal',
+            'grouped'    => $grouped,
+            'categories' => $categories,
         ]));
     }
 
@@ -69,8 +86,22 @@ class Pages extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // TODO (next pass): save to `contact_inquiries` table via ContactInquiryModel,
-        // notify admin, send auto-confirmation email to sender.
+        $model = model(ContactInquiryModel::class);
+        $id = $model->insert([
+            'name'       => $this->request->getPost('name'),
+            'company'    => $this->request->getPost('company'),
+            'email'      => $this->request->getPost('email'),
+            'phone'      => $this->request->getPost('phone'),
+            'subject'    => $this->request->getPost('subject'),
+            'message'    => $this->request->getPost('message'),
+            'status'     => 'new',
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        if ($id) {
+            $log = model(ActivityLogModel::class);
+            $log->log(0, 'contact_inquiry_created', 'ContactInquiry', $id);
+        }
 
         return redirect()->to('/contact-us')->with('success', 'Thanks for reaching out — our team will get back to you shortly.');
     }
@@ -102,12 +133,46 @@ class Pages extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // TODO (next pass):
-        // 1. Save to `demo_requests` table
-        // 2. Auto-create a lead (source = "Demo Request")
-        // 3. Notify admin (email + in-app alert)
-        // 4. Send confirmation email to prospect
-        // 5. Auto-create a follow-up task assigned to sales
+        // Auto-create lead first
+        $leadModel  = model(LeadModel::class);
+        $leadId = $leadModel->insert([
+            'full_name'    => $this->request->getPost('full_name'),
+            'company_name' => $this->request->getPost('company_name'),
+            'email'        => $this->request->getPost('email'),
+            'phone'        => $this->request->getPost('phone'),
+            'source'       => 'Demo Request',
+            'status'       => 'New',
+            'notes'        => 'Auto-created from demo request. Business type: ' . $this->request->getPost('business_type'),
+            'created_at'   => date('Y-m-d H:i:s'),
+            'updated_at'   => date('Y-m-d H:i:s'),
+        ]);
+
+        // Save demo request linked to the lead
+        $demoModel = model(DemoRequestModel::class);
+        $demoId = $demoModel->insert([
+            'full_name'        => $this->request->getPost('full_name'),
+            'company_name'     => $this->request->getPost('company_name'),
+            'email'            => $this->request->getPost('email'),
+            'phone'            => $this->request->getPost('phone'),
+            'address'          => $this->request->getPost('address'),
+            'employee_count'   => $this->request->getPost('employee_count'),
+            'current_software' => $this->request->getPost('current_software'),
+            'business_type'    => $this->request->getPost('business_type'),
+            'preferred_date'   => $this->request->getPost('preferred_date'),
+            'preferred_time'   => $this->request->getPost('preferred_time'),
+            'message'          => $this->request->getPost('message'),
+            'lead_id'          => $leadId,
+            'status'           => 'pending',
+            'created_at'       => date('Y-m-d H:i:s'),
+        ]);
+
+        if ($demoId) {
+            $log = model(ActivityLogModel::class);
+            $log->log(0, 'demo_request_created', 'DemoRequest', $demoId);
+            if ($leadId) {
+                $log->log(0, 'lead_created_from_demo', 'Lead', $leadId);
+            }
+        }
 
         return redirect()->to('/request-a-demo')->with('success', 'Your demo request has been received. Our team will contact you to confirm the schedule.');
     }

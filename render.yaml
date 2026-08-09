@@ -8,3 +8,30 @@ services:
         value: production
       - key: app.baseURL
         sync: false
+      - key: database.default.hostname
+        fromDatabase:
+          name: crm-nepal-db
+          property: host
+      - key: database.default.database
+        fromDatabase:
+          name: crm-nepal-db
+          property: database
+      - key: database.default.username
+        fromDatabase:
+          name: crm-nepal-db
+          property: user
+      - key: database.default.password
+        fromDatabase:
+          name: crm-nepal-db
+          property: password
+      - key: database.default.port
+        fromDatabase:
+          name: crm-nepal-db
+          property: port
+      - key: database.default.DBDriver
+        value: Postgre
+
+databases:
+  - name: crm-nepal-db
+    plan: free
+    databaseName: crm_software_nepal
