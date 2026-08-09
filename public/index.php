@@ -23,6 +23,9 @@ $paths = new Config\Paths();
 // Location of the framework bootstrap file
 require rtrim($paths->systemDirectory, '\\/ ') . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 // Load environment settings from .env files into $_SERVER and $_ENV
 require_once SYSTEMPATH . 'Config/DotEnv.php';
 (new CodeIgniter\Config\DotEnv(ROOTPATH))->load();
