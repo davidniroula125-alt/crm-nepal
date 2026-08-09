@@ -6,13 +6,13 @@ use CodeIgniter\Config\AutoloadConfig;
 
 class Autoload extends AutoloadConfig
 {
-    public array $psr4 = [
+    public $psr4 = [
         APP_NAMESPACE => APPPATH,
     ];
 
-    public array $classmap = [];
+    public $classmap = [];
 
-    public array $files = [];
+    public $files = [];
 
-    public array $helpers = [];
+    public $helpers = [];
 }
