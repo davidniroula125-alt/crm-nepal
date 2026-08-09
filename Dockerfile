@@ -8,19 +8,21 @@ RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 
-COPY . .
+COPY composer.json ./
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction 2>/dev/null || true
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction --no-progress
+
+COPY . .
 
 RUN composer dump-autoload --optimize --no-dev
 
-RUN printf "%s\n" "<VirtualHost *:80>" "    DocumentRoot /var/www/html/public" "" "    <Directory /var/www/html/public>" "        AllowOverride All" "        Require all granted" "    </Directory>" "" "    ErrorLog ${APACHE_LOG_DIR}/error.log" "    CustomLog ${APACHE_LOG_DIR}/access.log combined" "</VirtualHost>" > /etc/apache2/sites-available/000-default.conf
+RUN printf '%s\n' '<VirtualHost *:80>' '    DocumentRoot /var/www/html/public' '' '    <Directory /var/www/html/public>' '        AllowOverride All' '        Require all granted' '    </Directory>' '' '    ErrorLog ${APACHE_LOG_DIR}/error.log' '    CustomLog ${APACHE_LOG_DIR}/access.log combined' '</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
 RUN mkdir -p /var/www/html/writable/{cache,logs,session,uploads} \
     && chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/writable
+    && chmod -R 777 /var/www/html/writable
 
 EXPOSE 80
 
