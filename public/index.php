@@ -39,14 +39,28 @@ if (getcwd() . DIRECTORY_SEPARATOR !== FCPATH) {
 
 /*
  *---------------------------------------------------------------
+ * DEFINE COMPOSER PATH
+ *---------------------------------------------------------------
+ */
+
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    define('COMPOSER_PATH', __DIR__ . '/../vendor/autoload.php');
+} elseif (file_exists(__DIR__ . '/../../../vendor/autoload.php')) {
+    define('COMPOSER_PATH', __DIR__ . '/../../../vendor/autoload.php');
+}
+
+/*
+ *---------------------------------------------------------------
  * BOOTSTRAP THE APPLICATION
  *---------------------------------------------------------------
  */
 
+// LOAD OUR PATHS CONFIG FILE
 require FCPATH . '../app/Config/Paths.php';
 
 $paths = new Paths();
 
+// LOAD THE FRAMEWORK BOOTSTRAP FILE
 require $paths->systemDirectory . '/Boot.php';
 
 exit(Boot::bootWeb($paths));
