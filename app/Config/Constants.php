@@ -1,16 +1,16 @@
 <?php
 
-namespace Config;
-
-/**
- * System Constants
+/*
+ * ------------------------------------------------------
+ *  System Constants
+ * ------------------------------------------------------
  */
-define('CI_VERSION', '4.4.8');
+define('CI_VERSION', '4.5.6');
 define('CI_ENVIRONMENT', 'production');
 
 /*
  * ------------------------------------------------------
- *  Exit on error
+ *  Exit code constants
  * ------------------------------------------------------
  */
 defined('EXIT_SUCCESS')        || define('EXIT_SUCCESS', 0);
