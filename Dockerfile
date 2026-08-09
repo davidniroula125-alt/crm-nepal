@@ -21,10 +21,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Copy composer files first for caching
-COPY composer.json composer.lock ./
+COPY composer.json ./
 
 # Install dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction 2>/dev/null || composer install --no-dev --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Copy application code
 COPY . .

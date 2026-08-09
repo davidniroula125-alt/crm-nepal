@@ -1,34 +1,31 @@
 <?php namespace Config;
 
 use CodeIgniter\Config\Filters as BaseFilters;
+use App\Filters\AuthFilter;
 
 class Filters extends BaseFilters
 {
     public array $aliases = [
-        'auth' => \App\Filters\AuthFilter::class,
+        'auth' => AuthFilter::class,
     ];
 
     public array $globals = [
-        'before' => [],
+        'before' => [
+            'auth' => [
+                'except' => [
+                    '/',
+                    '/login',
+                    '/signup',
+                    '/logout',
+                    '/assets/*',
+                    '/api/*',
+                ],
+            ],
+        ],
         'after'  => [],
     ];
 
     public array $methods = [];
 
-    public array $filters = [
-        'auth' => [
-            'before' => [
-                'dashboard',
-                'contacts/*',
-                'pipeline/*',
-                'invoices/*',
-                'reports',
-                'settings/*',
-                'content/*',
-                'inquiries/*',
-                'complaints/*',
-                'users/*',
-            ],
-        ],
-    ];
+    public array $filters = [];
 }
