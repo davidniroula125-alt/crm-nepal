@@ -2,18 +2,20 @@
 
 namespace Config;
 
-class Session
+use CodeIgniter\Config\BaseConfig;
+use CodeIgniter\Session\Handlers\BaseHandler;
+use CodeIgniter\Session\Handlers\FileHandler;
+
+class Session extends BaseConfig
 {
-    public string $driver = 'CodeIgniter\Session\Handlers\FileHandler';
-    public string $sessionSavePath = null;
-    public string $matchIP = false;
-    public int    $timeToUpdate = 0;
-    public bool   $regenerateDestroy = false;
+    public string $driver = FileHandler::class;
     public string $cookieName = 'ci_session';
-    public int    $cookieExpire = 7200;
-    public string $cookiePath = '/';
-    public string $cookieDomain = '';
-    public string $cookieSecure = false;
-    public string $cookieHTTPOnly = false;
-    public string $cookieSameSite = 'Lax';
+    public int $expiration = 7200;
+    public string $savePath = WRITEPATH . 'session';
+    public bool $matchIP = false;
+    public int $timeToUpdate = 300;
+    public bool $regenerateDestroy = false;
+    public ?string $DBGroup = null;
+    public int $lockRetryInterval = 100_000;
+    public int $lockMaxRetries = 300;
 }

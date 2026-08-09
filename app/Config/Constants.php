@@ -1,18 +1,17 @@
 <?php
 
-/*
- * ------------------------------------------------------
- *  System Constants
- * ------------------------------------------------------
- */
-define('CI_VERSION', '4.5.6');
-define('CI_ENVIRONMENT', 'production');
+defined('APP_NAMESPACE') || define('APP_NAMESPACE', 'App');
+defined('COMPOSER_PATH') || define('COMPOSER_PATH', ROOTPATH . 'vendor/autoload.php');
 
-/*
- * ------------------------------------------------------
- *  Exit code constants
- * ------------------------------------------------------
- */
+defined('SECOND') || define('SECOND', 1);
+defined('MINUTE') || define('MINUTE', 60);
+defined('HOUR')   || define('HOUR', 3600);
+defined('DAY')    || define('DAY', 86400);
+defined('WEEK')   || define('WEEK', 604800);
+defined('MONTH')  || define('MONTH', 2_592_000);
+defined('YEAR')   || define('YEAR', 31_536_000);
+defined('DECADE') || define('DECADE', 315_360_000);
+
 defined('EXIT_SUCCESS')        || define('EXIT_SUCCESS', 0);
 defined('EXIT_ERROR')          || define('EXIT_ERROR', 1);
 defined('EXIT_CONFIG')         || define('EXIT_CONFIG', 3);

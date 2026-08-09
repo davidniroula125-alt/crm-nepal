@@ -2,15 +2,14 @@
 
 namespace Config;
 
-class View
+use CodeIgniter\Config\View as BaseView;
+use CodeIgniter\View\ViewDecoratorInterface;
+
+class View extends BaseView
 {
-    public string $parserClass = 'CodeIgniter\View\Parser';
-    public string $parserPluginPath = '';
-    public array  $filters = [];
-    public string $decorator = '';
-    public string $space = '';
-    public bool   $saveData = false;
-    public string $cascadeDelimiter = '|';
-    public array  $sectionDelimiters = ['section', 'endSection'];
-    public array  $templateDelimiters = ['template', 'endTemplate'];
+    public bool $saveData = true;
+    public array $filters = [];
+    public array $plugins = [];
+    public array $decorators = [];
+    public string $appOverridesFolder = 'overrides';
 }

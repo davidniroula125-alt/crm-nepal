@@ -2,18 +2,17 @@
 
 namespace Config;
 
-class Autoload
+use CodeIgniter\Config\AutoloadConfig;
+
+class Autoload extends AutoloadConfig
 {
     public array $psr4 = [
-        'Config'    => APPPATH . 'Config',
-        'App'       => APPPATH,
+        APP_NAMESPACE => APPPATH,
     ];
 
     public array $classmap = [];
 
     public array $files = [];
 
-    public bool $discoverEvents = false;
-
-    public array $modules = [];
+    public array $helpers = [];
 }

@@ -2,21 +2,31 @@
 
 namespace Config;
 
-class Toolbar
+use CodeIgniter\Config\BaseConfig;
+use CodeIgniter\Debug\Toolbar\Collectors\Database;
+use CodeIgniter\Debug\Toolbar\Collectors\Events;
+use CodeIgniter\Debug\Toolbar\Collectors\Files;
+use CodeIgniter\Debug\Toolbar\Collectors\Logs;
+use CodeIgniter\Debug\Toolbar\Collectors\Routes;
+use CodeIgniter\Debug\Toolbar\Collectors\Timers;
+use CodeIgniter\Debug\Toolbar\Collectors\Views;
+
+class Toolbar extends BaseConfig
 {
     public array $collectors = [
-        'CodeIgniter\DebugToolbar\Collectors\Time',
-        'CodeIgniter\DebugToolbar\Collectors\Database',
-        'CodeIgniter\DebugToolbar\Collectors\Logs',
-        'CodeIgniter\DebugToolbar\Collectors\Variables',
-        'CodeIgniter\DebugToolbar\Collectors\HttpHeaders',
+        Timers::class,
+        Database::class,
+        Logs::class,
+        Views::class,
+        Files::class,
+        Routes::class,
+        Events::class,
     ];
-
-    public array $watchers = [];
-
-    public array $collectableRoutes = [];
-
-    public bool $enableRouteDiscovery = true;
-
-    public string $url = '__open_bar';
+    public bool $collectVarData = true;
+    public int $maxHistory = 20;
+    public string $viewsPath = SYSTEMPATH . 'Debug/Toolbar/Views/';
+    public int $maxQueries = 100;
+    public array $watchedDirectories = ['app'];
+    public array $watchedExtensions = ['php', 'css', 'js', 'html', 'svg', 'json', 'env'];
+    public array $disableOnHeaders = [];
 }
