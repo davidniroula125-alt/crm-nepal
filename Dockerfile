@@ -1,7 +1,7 @@
 FROM php:8.2-apache
 
-RUN apt-get update && apt-get install -y libicu-dev libpq-dev \
-    && docker-php-ext-install intl pdo_pgsql pgsql \
+RUN apt-get update && apt-get install -y libicu-dev libpq-dev libzip-dev unzip \
+    && docker-php-ext-install intl pdo_pgsql pgsql zip \
     && rm -rf /var/lib/apt/lists/*
 
 RUN a2enmod rewrite
@@ -12,11 +12,7 @@ COPY . .
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer update --no-dev --prefer-dist --no-interaction --no-progress 2>&1 || \
-    (echo "COMPOSER UPDATE FAILED" && cat /tmp/composer.json 2>/dev/null && ls -la && exit 1)
-
-RUN ls -la vendor/codeigniter4/framework/system/bootstrap.php || \
-    (echo "VENDOR MISSING - listing vendor:" && ls -la vendor/ 2>/dev/null && exit 1)
+RUN composer update --no-dev --prefer-dist --no-interaction --no-progress
 
 RUN composer dump-autoload --optimize --no-dev
 
