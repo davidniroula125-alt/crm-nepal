@@ -6,19 +6,23 @@ class BaseController extends Controller
 {
     protected $session;
     protected $db;
+    private static $dbInitialized = false;
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
         $this->session = session();
-        $this->db = \Config\Database::connect();
-    }
 
-    protected function setTheme(string $title = 'CRM Nepal'): void
-    {
-        $data['title'] = $title;
-        $data['user'] = $this->session->get('user');
-        $data['currentUrl'] = service('uri')->getPath();
-        return $data;
+        // Auto-create database tables on first request
+        if (!self::$dbInitialized) {
+            self::$dbInitialized = true;
+            try {
+                \Config\DatabaseSetup::initialize();
+            } catch (\Throwable $e) {
+                error_log('DatabaseSetup: ' . $e->getMessage());
+            }
+        }
+
+        $this->db = \Config\Database::connect();
     }
 }
