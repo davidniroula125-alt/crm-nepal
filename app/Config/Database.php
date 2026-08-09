@@ -5,7 +5,9 @@ use CodeIgniter\Config\BaseConfig;
 class Database extends BaseConfig
 {
     public string $defaultGroup = 'default';
-    public array $queryDriver = ['MySQLi' => \CodeIgniter\Database\MySQLi\Driver::class];
+    public array $queryDriver = [
+        'Postgre' => \CodeIgniter\Database\Postgre\Driver::class,
+    ];
     public array $groups = [];
 
     public function __construct()
@@ -14,21 +16,22 @@ class Database extends BaseConfig
         $this->groups['default'] = [
             'DSN'      => '',
             'hostname' => getenv('DB_HOST') ?: 'localhost',
-            'username' => getenv('DB_USER') ?: 'root',
+            'username' => getenv('DB_USER') ?: 'postgres',
             'password' => getenv('DB_PASS') ?: '',
             'database' => getenv('DB_NAME') ?: 'crm_nepal',
-            'DBDriver' => 'MySQLi',
+            'DBDriver' => 'Postgre',
             'DBPrefix' => '',
             'pConnect' => false,
             'DBDebug'  => (ENVIRONMENT !== 'production'),
-            'charset'  => 'utf8mb4',
-            'DBCollat' => 'utf8mb4_unicode_ci',
+            'charset'  => 'utf8',
+            'DBCollat' => '',
             'swapPre'  => '',
+            'schema'   => 'public',
             'encrypt'  => false,
             'compress' => false,
             'strictOn' => false,
             'failover' => [],
-            'port'     => getenv('DB_PORT') ?: '3306',
+            'port'     => getenv('DB_PORT') ?: '5432',
         ];
     }
 }

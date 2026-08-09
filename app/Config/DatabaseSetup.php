@@ -11,29 +11,128 @@ class DatabaseSetup
         if (self::$initialized) return;
         self::$initialized = true;
         $db = Config::connect();
-        $tables = $db->listTables();
-        if (count($tables) > 0) return;
+        $result = $db->query("SELECT to_regclass('public.companies') AS exists");
+        $row = $result->getRow();
+        if ($row && $row->exists) return;
         self::createTables($db);
         self::seedData($db);
     }
 
     private static function createTables($db): void
     {
-        $sqls = [
-            "CREATE TABLE companies (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, plan VARCHAR(50) DEFAULT 'starter', created_at DATETIME DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-            "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, company_id INT, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password_hash VARCHAR(255) NOT NULL, role VARCHAR(20) DEFAULT 'user', language VARCHAR(5) DEFAULT 'en', created_at DATETIME DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY (email)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-            "CREATE TABLE contacts (id INT AUTO_INCREMENT PRIMARY KEY, company_id INT, name VARCHAR(255) NOT NULL, company_name VARCHAR(255), email VARCHAR(255), phone VARCHAR(50), status VARCHAR(50) DEFAULT 'lead', value DECIMAL(12,2) DEFAULT 0, last_contact_date DATE, created_at DATETIME DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-            "CREATE TABLE deals (id INT AUTO_INCREMENT PRIMARY KEY, company_id INT, contact_id INT, title VARCHAR(255) NOT NULL, stage VARCHAR(50) DEFAULT 'lead', value DECIMAL(12,2) DEFAULT 0, assigned_to INT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-            "CREATE TABLE invoices (id INT AUTO_INCREMENT PRIMARY KEY, company_id INT, contact_id INT, invoice_number VARCHAR(50) NOT NULL, amount DECIMAL(12,2) DEFAULT 0, vat_amount DECIMAL(12,2) DEFAULT 0, payment_method VARCHAR(50) DEFAULT 'bank_transfer', status VARCHAR(20) DEFAULT 'pending', due_date DATE, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY (invoice_number)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-            "CREATE TABLE support_messages (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), email VARCHAR(255), subject VARCHAR(255), message TEXT, type VARCHAR(50) DEFAULT 'contact', status VARCHAR(50) DEFAULT 'unread', reply TEXT, user_id INT, company_id INT, replied_by INT, replied_at DATETIME, read_at DATETIME, resolved_at DATETIME, closed_at DATETIME, created_at DATETIME DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-            "CREATE TABLE activity_log (id INT AUTO_INCREMENT PRIMARY KEY, company_id INT, user_id INT, action VARCHAR(255), entity_type VARCHAR(100), entity_id INT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-            "CREATE TABLE login_attempts (id INT AUTO_INCREMENT PRIMARY KEY, ip_address VARCHAR(45), email VARCHAR(255), attempted_at DATETIME DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-            "CREATE TABLE login_sessions (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT, ip_address VARCHAR(45), user_agent TEXT, logged_in_at DATETIME DEFAULT CURRENT_TIMESTAMP, logged_out_at DATETIME) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-            "CREATE TABLE site_content (id INT AUTO_INCREMENT PRIMARY KEY, section VARCHAR(100) NOT NULL, key_name VARCHAR(100) NOT NULL, title VARCHAR(255), description TEXT, icon VARCHAR(255), sort_order INT DEFAULT 0, is_active TINYINT(1) DEFAULT 1, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
-        ];
-        foreach ($sqls as $sql) {
-            $db->query($sql);
-        }
+        $db->query("CREATE TABLE IF NOT EXISTS companies (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            plan VARCHAR(50) DEFAULT 'starter',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        $db->query("CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            company_id INTEGER,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            password_hash VARCHAR(255) NOT NULL,
+            role VARCHAR(20) DEFAULT 'user',
+            language VARCHAR(5) DEFAULT 'en',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        $db->query("CREATE TABLE IF NOT EXISTS contacts (
+            id SERIAL PRIMARY KEY,
+            company_id INTEGER,
+            name VARCHAR(255) NOT NULL,
+            company_name VARCHAR(255),
+            email VARCHAR(255),
+            phone VARCHAR(50),
+            status VARCHAR(50) DEFAULT 'lead',
+            value DECIMAL(12,2) DEFAULT 0,
+            last_contact_date DATE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        $db->query("CREATE TABLE IF NOT EXISTS deals (
+            id SERIAL PRIMARY KEY,
+            company_id INTEGER,
+            contact_id INTEGER,
+            title VARCHAR(255) NOT NULL,
+            stage VARCHAR(50) DEFAULT 'lead',
+            value DECIMAL(12,2) DEFAULT 0,
+            assigned_to INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        $db->query("CREATE TABLE IF NOT EXISTS invoices (
+            id SERIAL PRIMARY KEY,
+            company_id INTEGER,
+            contact_id INTEGER,
+            invoice_number VARCHAR(50) UNIQUE NOT NULL,
+            amount DECIMAL(12,2) DEFAULT 0,
+            vat_amount DECIMAL(12,2) DEFAULT 0,
+            payment_method VARCHAR(50) DEFAULT 'bank_transfer',
+            status VARCHAR(20) DEFAULT 'pending',
+            due_date DATE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        $db->query("CREATE TABLE IF NOT EXISTS support_messages (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255),
+            email VARCHAR(255),
+            subject VARCHAR(255),
+            message TEXT,
+            type VARCHAR(50) DEFAULT 'contact',
+            status VARCHAR(50) DEFAULT 'unread',
+            reply TEXT,
+            user_id INTEGER,
+            company_id INTEGER,
+            replied_by INTEGER,
+            replied_at TIMESTAMP,
+            read_at TIMESTAMP,
+            resolved_at TIMESTAMP,
+            closed_at TIMESTAMP,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        $db->query("CREATE TABLE IF NOT EXISTS activity_log (
+            id SERIAL PRIMARY KEY,
+            company_id INTEGER,
+            user_id INTEGER,
+            action VARCHAR(255),
+            entity_type VARCHAR(100),
+            entity_id INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        $db->query("CREATE TABLE IF NOT EXISTS login_attempts (
+            id SERIAL PRIMARY KEY,
+            ip_address VARCHAR(45),
+            email VARCHAR(255),
+            attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        $db->query("CREATE TABLE IF NOT EXISTS login_sessions (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER,
+            ip_address VARCHAR(45),
+            user_agent TEXT,
+            logged_in_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            logged_out_at TIMESTAMP
+        )");
+
+        $db->query("CREATE TABLE IF NOT EXISTS site_content (
+            id SERIAL PRIMARY KEY,
+            section VARCHAR(100) NOT NULL,
+            key_name VARCHAR(100) NOT NULL,
+            title VARCHAR(255),
+            description TEXT,
+            icon VARCHAR(255),
+            sort_order INTEGER DEFAULT 0,
+            is_active SMALLINT DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
     }
 
     private static function seedData($db): void
