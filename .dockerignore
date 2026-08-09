@@ -1,0 +1,13 @@
+.git
+.gitignore
+.env
+writable/cache/*
+writable/logs/*
+writable/session/*
+writable/uploads/*
+node_modules
+.DS_Store
+docker
+README.md
+render.yaml
+Procfile

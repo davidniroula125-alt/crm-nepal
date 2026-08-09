@@ -1,10 +1,11 @@
-RewriteEngine On
+<VirtualHost *:80>
+    DocumentRoot /var/www/html/public
 
-# Redirect Trailing Slashes
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)/$ /$1 [L,R=301]
+    <Directory /var/www/html/public>
+        AllowOverride All
+        Require all granted
+    </Directory>
 
-# Front Controller
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php/$1 [L]
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
