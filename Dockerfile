@@ -12,7 +12,7 @@ COPY composer.json ./
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction --no-progress
+RUN composer update --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction --no-progress
 
 COPY . .
 
