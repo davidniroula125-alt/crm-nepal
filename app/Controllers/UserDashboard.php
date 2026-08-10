@@ -16,18 +16,20 @@ class UserDashboard extends BaseController
         $complaintModel = new ComplaintModel();
         $totalComplaints   = $complaintModel->where('user_id', $userId)->countAllResults();
         $openComplaints    = $complaintModel->where('user_id', $userId)->where('status', 'Open')->countAllResults();
+        $inProgressComplaints = $complaintModel->where('user_id', $userId)->where('status', 'In Progress')->countAllResults();
         $repliedComplaints = $complaintModel->where('user_id', $userId)->where('status', 'Replied')->countAllResults();
         $closedComplaints  = $complaintModel->where('user_id', $userId)->where('status', 'Closed')->countAllResults();
-        $recentComplaints  = $complaintModel->where('user_id', $userId)->orderBy('created_at', 'DESC')->limit(5)->findAll();
+        $allComplaints     = $complaintModel->where('user_id', $userId)->orderBy('created_at', 'DESC')->findAll();
 
         return view('user/dashboard', [
-            'userName'         => session()->get('user_name'),
-            'userEmail'        => session()->get('user_email'),
-            'totalComplaints'  => $totalComplaints,
-            'openComplaints'   => $openComplaints,
-            'repliedComplaints'=> $repliedComplaints,
-            'closedComplaints' => $closedComplaints,
-            'recentComplaints' => $recentComplaints,
+            'userName'            => session()->get('user_name'),
+            'userEmail'           => session()->get('user_email'),
+            'totalComplaints'     => $totalComplaints,
+            'openComplaints'      => $openComplaints,
+            'inProgressComplaints'=> $inProgressComplaints,
+            'repliedComplaints'   => $repliedComplaints,
+            'closedComplaints'    => $closedComplaints,
+            'allComplaints'       => $allComplaints,
         ]);
     }
 }

@@ -56,6 +56,7 @@ class Complaints extends BaseController
         $reply = $this->request->getPost('admin_reply');
         $this->complaintModel->update($id, [
             'admin_reply' => $reply,
+            'replied_at'  => date('Y-m-d H:i:s'),
             'status'      => 'Replied',
             'updated_at'  => date('Y-m-d H:i:s'),
         ]);

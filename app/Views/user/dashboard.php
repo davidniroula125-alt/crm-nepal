@@ -23,13 +23,14 @@ body{font-family:var(--font);color:var(--text);background:var(--bg);min-height:1
 .welcome h2{font-family:var(--font-h);font-size:24px;margin-bottom:6px}
 .welcome p{opacity:.85;font-size:15px}
 
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
 .stat-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;box-shadow:0 2px 6px rgba(27,58,107,.06);transition:transform .2s}
 .stat-card:hover{transform:translateY(-2px)}
 .stat-number{font-size:32px;font-weight:700;font-family:var(--font-h);margin-bottom:4px}
 .stat-label{font-size:13px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
 .stat-open .stat-number{color:var(--warning)}
-.stat-replied .stat-number{color:var(--info)}
+.stat-progress .stat-number{color:var(--info)}
+.stat-replied .stat-number{color:#6F42C1}
 .stat-closed .stat-number{color:var(--success)}
 .stat-total .stat-number{color:var(--primary)}
 
@@ -55,8 +56,8 @@ body{font-family:var(--font);color:var(--text);background:var(--bg);min-height:1
 .badge{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;display:inline-block}
 .badge-open{background:#FFF3CD;color:#856404}
 .badge-progress{background:#CCE5FF;color:#004085}
-.badge-replied{background:#D4EDDA;color:#155724}
-.badge-closed{background:#E2E3E5;color:#383D41}
+.badge-replied{background:#E8DAEF;color:#6C3483}
+.badge-closed{background:#D5F5E3;color:#1E8449}
 
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
@@ -67,6 +68,20 @@ th{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px;c
 .alert-error{background:#FDECEA;color:var(--accent);border:1px solid #F5C6CB}
 
 .empty{text-align:center;padding:24px;color:var(--muted);font-size:14px}
+
+.reply-box{background:#F0F4FF;border-left:3px solid var(--primary-mid);padding:12px 16px;border-radius:0 8px 8px 0;margin-top:8px}
+.reply-box .reply-header{font-size:12px;font-weight:600;color:var(--primary-mid);margin-bottom:4px}
+.reply-box .reply-text{font-size:13px;color:var(--text);line-height:1.5}
+.reply-box .reply-date{font-size:11px;color:var(--muted);margin-top:4px}
+
+.no-reply{font-size:12px;color:var(--muted);font-style:italic}
+
+.complaint-row{border-bottom:1px solid var(--border);padding:16px 0}
+.complaint-row:last-child{border-bottom:none}
+.complaint-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:6px}
+.complaint-header h4{font-size:15px;font-weight:600;color:var(--text);margin:0}
+.complaint-meta{font-size:12px;color:var(--muted);margin-bottom:8px}
+.complaint-message{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -96,11 +111,15 @@ th{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px;c
   <div class="stats-grid">
     <div class="stat-card stat-total">
       <div class="stat-number"><?= $totalComplaints ?></div>
-      <div class="stat-label">Total Complaints</div>
+      <div class="stat-label">Total</div>
     </div>
     <div class="stat-card stat-open">
       <div class="stat-number"><?= $openComplaints ?></div>
       <div class="stat-label">Open</div>
+    </div>
+    <div class="stat-card stat-progress">
+      <div class="stat-number"><?= $inProgressComplaints ?></div>
+      <div class="stat-label">In Progress</div>
     </div>
     <div class="stat-card stat-replied">
       <div class="stat-number"><?= $repliedComplaints ?></div>
@@ -130,30 +149,41 @@ th{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px;c
     </div>
 
     <div class="card">
-      <h3>Recent Complaints</h3>
-      <?php if (empty($recentComplaints)): ?>
+      <h3>My Complaints</h3>
+      <?php if (empty($allComplaints)): ?>
         <div class="empty">No complaints yet.</div>
       <?php else: ?>
-        <table>
-          <thead><tr><th>Subject</th><th>Status</th><th>Date</th></tr></thead>
-          <tbody>
-          <?php foreach ($recentComplaints as $c): ?>
-            <tr>
-              <td><strong><?= esc($c->subject) ?></strong></td>
-              <td>
-                <?php
-                $cls = 'badge-closed';
-                if ($c->status === 'Open') $cls = 'badge-open';
-                elseif ($c->status === 'In Progress') $cls = 'badge-progress';
-                elseif ($c->status === 'Replied') $cls = 'badge-replied';
-                ?>
-                <span class="badge <?= $cls ?>"><?= esc($c->status) ?></span>
-              </td>
-              <td><?= date('M d', strtotime($c->created_at)) ?></td>
-            </tr>
-          <?php endforeach; ?>
-          </tbody>
-        </table>
+        <?php foreach ($allComplaints as $c): ?>
+          <div class="complaint-row">
+            <div class="complaint-header">
+              <h4><?= esc($c->subject) ?></h4>
+              <?php
+              $cls = 'badge-closed';
+              if ($c->status === 'Open') $cls = 'badge-open';
+              elseif ($c->status === 'In Progress') $cls = 'badge-progress';
+              elseif ($c->status === 'Replied') $cls = 'badge-replied';
+              ?>
+              <span class="badge <?= $cls ?>"><?= esc($c->status) ?></span>
+            </div>
+            <div class="complaint-meta">
+              Submitted <?= date('M d, Y \a\t g:i A', strtotime($c->created_at)) ?>
+            </div>
+            <?php if (!empty($c->message)): ?>
+              <div class="complaint-message"><?= nl2br(esc($c->message)) ?></div>
+            <?php endif; ?>
+            <?php if (!empty($c->admin_reply)): ?>
+              <div class="reply-box">
+                <div class="reply-header">Admin Reply</div>
+                <div class="reply-text"><?= nl2br(esc($c->admin_reply)) ?></div>
+                <?php if (!empty($c->replied_at)): ?>
+                  <div class="reply-date">Replied <?= date('M d, Y \a\t g:i A', strtotime($c->replied_at)) ?></div>
+                <?php endif; ?>
+              </div>
+            <?php else: ?>
+              <div class="no-reply">Awaiting admin response...</div>
+            <?php endif; ?>
+          </div>
+        <?php endforeach; ?>
       <?php endif; ?>
     </div>
   </div>

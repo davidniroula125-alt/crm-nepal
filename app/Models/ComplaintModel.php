@@ -17,6 +17,7 @@ class ComplaintModel extends Model
         'subject',
         'message',
         'admin_reply',
+        'replied_at',
         'status',
         'created_at',
         'updated_at',
