@@ -28,17 +28,7 @@ class Filters extends BaseFilters
         'adminAuth'     => \App\Filters\AdminAuth::class,
     ];
 
-    public array $required = [
-        'before' => [
-            'forcehttps',
-            'pagecache',
-        ],
-        'after' => [
-            'pagecache',
-            'performance',
-            'toolbar',
-        ],
-    ];
+    public array $required = [];
 
     public array $globals = [
         'before' => [],

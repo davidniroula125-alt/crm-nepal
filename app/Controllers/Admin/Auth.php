@@ -7,13 +7,14 @@ use App\Models\ActivityLogModel;
 
 class Auth extends BaseController
 {
-    protected $userModel;
-    protected $activityLog;
-
-    public function __construct()
+    protected function getUserModel()
     {
-        $this->userModel    = new UserModel();
-        $this->activityLog  = new ActivityLogModel();
+        return new UserModel();
+    }
+
+    protected function getActivityLog()
+    {
+        return new ActivityLogModel();
     }
 
     /**
@@ -47,7 +48,8 @@ class Auth extends BaseController
         $email    = $this->request->getPost('email');
         $password = $this->request->getPost('password');
 
-        $user = $this->userModel->findByEmail($email);
+        $userModel = $this->getUserModel();
+        $user = $userModel->findByEmail($email);
 
         if (! $user) {
             return redirect()->back()
@@ -66,7 +68,7 @@ class Auth extends BaseController
 
         // Verify password
         if (! password_verify($password, $user->password_hash)) {
-            $this->userModel->incrementFailedAttempts($user->id);
+            $userModel->incrementFailedAttempts($user->id);
 
             return redirect()->back()
                 ->withInput()
@@ -90,11 +92,12 @@ class Auth extends BaseController
         ]);
 
         // Update last login info and reset failed attempts
-        $this->userModel->updateLastLogin($user->id, $this->request->getIPAddress());
-        $this->userModel->resetFailedAttempts($user->id);
+        $userModel->updateLastLogin($user->id, $this->request->getIPAddress());
+        $userModel->resetFailedAttempts($user->id);
 
         // Log the activity
-        $this->activityLog->log($user->id, 'Logged in');
+        $activityLog = $this->getActivityLog();
+        $activityLog->log($user->id, 'Logged in');
 
         return redirect()->to('/admin/dashboard');
     }
@@ -107,7 +110,7 @@ class Auth extends BaseController
         $userId = session()->get('user_id');
 
         if ($userId) {
-            $this->activityLog->log($userId, 'Logged out');
+            $this->getActivityLog()->log($userId, 'Logged out');
         }
 
         session()->destroy();
@@ -139,7 +142,7 @@ class Auth extends BaseController
         }
 
         $email = $this->request->getPost('email');
-        $user  = $this->userModel->findByEmail($email);
+        $user  = $this->getUserModel()->findByEmail($email);
 
         // Always show success to prevent email enumeration
         return redirect()->back()
@@ -181,9 +184,8 @@ class Auth extends BaseController
         $token    = $this->request->getPost('token');
         $password = $this->request->getPost('password');
 
-        // In a real implementation, validate the token against a password_resets table.
-        // For now, this is a placeholder that returns an appropriate message.
-        $user = $this->userModel->where('remember_token', $token)->first();
+        $userModel = $this->getUserModel();
+        $user = $userModel->where('remember_token', $token)->first();
 
         if (! $user) {
             return redirect()->back()
@@ -192,10 +194,10 @@ class Auth extends BaseController
         }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-        $this->userModel->updatePassword($user->id, $passwordHash);
-        $this->userModel->update($user->id, ['remember_token' => null]);
+        $userModel->updatePassword($user->id, $passwordHash);
+        $userModel->update($user->id, ['remember_token' => null]);
 
-        $this->activityLog->log($user->id, 'Password reset via token');
+        $this->getActivityLog()->log($user->id, 'Password reset via token');
 
         return redirect()->to('/admin/login')
             ->with('success', 'Your password has been reset. You can now log in.');
