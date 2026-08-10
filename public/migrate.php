@@ -22,15 +22,32 @@ $pass = getenv('database.default.password');
 
 echo "Host: $host\nPort: $port\nDB: $db\nUser: $user\n";
 
-$connStr = "pgsql:host=$host;port=$port;dbname=$db;sslmode=require";
-try {
-    $pdo = new PDO($connStr, $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+$connStr = "host=$host port=$port dbname=$db user=$user password=$pass sslmode=require";
+echo "Connecting with pg_connect...\n";
+
+$conn = @pg_connect($connStr);
+if (!$conn) {
+    echo "pg_connect failed. Trying pgsql:// DSN...\n";
+    $dsn = "pgsql://$user:$pass@$host:$port/$db?sslmode=require";
+    $conn = @pg_connect($dsn);
+}
+
+if ($conn) {
     echo "Connected!\n";
     $schema = file_get_contents(__DIR__ . '/../database/schema.sql');
-    $pdo->exec($schema);
-    echo "Schema applied!\n";
-    $tables = $pdo->query("SELECT tablename FROM pg_tables WHERE schemaname='public'")->fetchAll(PDO::FETCH_COLUMN);
-    echo "Tables (" . count($tables) . "): " . implode(', ', $tables) . "\n";
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage() . "\n";
+    $result = pg_query($conn, $schema);
+    if ($result) {
+        echo "Schema applied!\n";
+        $res = pg_query($conn, "SELECT tablename FROM pg_tables WHERE schemaname='public'");
+        $tables = [];
+        while ($row = pg_fetch_assoc($res)) {
+            $tables[] = $row['tablename'];
+        }
+        echo "Tables (" . count($tables) . "): " . implode(', ', $tables) . "\n";
+    } else {
+        echo "Schema error: " . pg_last_error($conn) . "\n";
+    }
+    pg_close($conn);
+} else {
+    echo "Connection failed: " . pg_last_error() . "\n";
 }
