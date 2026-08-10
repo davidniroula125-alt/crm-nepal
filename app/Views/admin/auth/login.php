@@ -15,24 +15,15 @@
 
   <div class="form-group">
     <label for="email">Email Address</label>
-    <input type="email"
-           id="email"
-           name="email"
-           class="form-control"
+    <input type="email" id="email" name="email" class="form-control"
            value="<?= esc(old('email')) ?>"
-           placeholder="admin@crmsoftwarenepal.com"
-           required
-           autofocus>
+           placeholder="admin@crmsoftwarenepal.com" required autofocus>
   </div>
 
   <div class="form-group">
     <label for="password">Password</label>
-    <input type="password"
-           id="password"
-           name="password"
-           class="form-control"
-           placeholder="Enter your password"
-           required>
+    <input type="password" id="password" name="password" class="form-control"
+           placeholder="Enter your password" required>
   </div>
 
   <div class="form-check">
@@ -40,11 +31,7 @@
     <label for="remember">Remember me</label>
   </div>
 
-  <button type="submit" class="btn btn-primary">Log In</button>
+  <button type="submit" class="btn btn-primary">Sign In</button>
 </form>
-
-<div class="login-links">
-  <a href="<?= site_url('admin/forgot-password') ?>">Forgot your password?</a>
-</div>
 
 <?= $this->endSection() ?>

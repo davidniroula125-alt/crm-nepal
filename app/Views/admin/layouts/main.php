@@ -13,7 +13,9 @@
 
 <aside class="admin-sidebar" id="adminSidebar">
     <div class="sidebar-header">
-        <a href="<?= base_url('/') ?>" class="sidebar-logo"><img src="<?= base_url('assets/images/logo.png') ?>" alt="CRM Nepal" height="32" style="filter:brightness(1.3);"></a>
+        <a href="<?= base_url('/admin/dashboard') ?>" class="sidebar-logo">
+            <img src="<?= base_url('assets/images/logo.png') ?>" alt="CRM Nepal" height="30">
+        </a>
         <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close sidebar">&times;</button>
     </div>
 
@@ -21,6 +23,8 @@
         <a href="<?= base_url('/admin/dashboard') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'dashboard' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#9632;</span> Dashboard
         </a>
+
+        <div class="sidebar-nav-label">CRM</div>
         <a href="<?= base_url('/admin/leads') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'leads' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#9733;</span> Leads
         </a>
@@ -33,15 +37,24 @@
         <a href="<?= base_url('/admin/contact-inquiries') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'contact-inquiries' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#9993;</span> Contact Inquiries
         </a>
+
+        <div class="sidebar-nav-label">Finance</div>
         <a href="<?= base_url('/admin/subscriptions') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'subscriptions' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#10003;</span> Subscriptions
         </a>
         <a href="<?= base_url('/admin/payments') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'payments' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#36;</span> Payments
         </a>
+
+        <div class="sidebar-nav-label">Support</div>
         <a href="<?= base_url('/admin/support-tickets') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'support-tickets' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#128172;</span> Support Tickets
         </a>
+        <a href="<?= base_url('/admin/complaints') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'complaints' ? 'active' : '' ?>">
+            <span class="sidebar-icon">&#9888;</span> Complaints
+        </a>
+
+        <div class="sidebar-nav-label">Reports & Content</div>
         <a href="<?= base_url('/admin/reports') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'reports' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#128200;</span> Reports
         </a>
@@ -54,23 +67,19 @@
         <a href="<?= base_url('/admin/blog') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'blog' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#9998;</span> Blog
         </a>
+
+        <div class="sidebar-nav-label">Administration</div>
         <a href="<?= base_url('/admin/users') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'users' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#9823;</span> Users
-        </a>
-        <a href="<?= base_url('/admin/complaints') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'complaints' ? 'active' : '' ?>">
-            <span class="sidebar-icon">&#9888;</span> Complaints
-        </a>
-        <a href="<?= base_url('/admin/logs') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'logs' ? 'active' : '' ?>">
-            <span class="sidebar-icon">&#128196;</span> Activity Logs
         </a>
         <a href="<?= base_url('/admin/site') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'site' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#127968;</span> Site Content
         </a>
+        <a href="<?= base_url('/admin/logs') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'logs' ? 'active' : '' ?>">
+            <span class="sidebar-icon">&#128196;</span> Activity Logs
+        </a>
         <a href="<?= base_url('/admin/settings') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'settings' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#9881;</span> Settings
-        </a>
-        <a href="<?= base_url('/admin/site') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'site' ? 'active' : '' ?>">
-            <span class="sidebar-icon">&#128196;</span> Site Content
         </a>
     </nav>
 
@@ -82,7 +91,6 @@
 </aside>
 
 <div class="admin-content-wrapper" id="adminContentWrapper">
-
     <header class="admin-topbar">
         <div class="topbar-left">
             <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle sidebar">&#9776;</button>
@@ -107,7 +115,6 @@
 
         <?= $this->renderSection('content') ?>
     </main>
-
 </div>
 
 <script src="<?= base_url('assets/js/admin.js') ?>"></script>
