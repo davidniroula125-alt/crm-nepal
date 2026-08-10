@@ -8,39 +8,48 @@ class Debug extends BaseController
     {
         $output = "PHP OK\n";
         $output .= "CI4 Version: " . \CodeIgniter\CodeIgniter::CI_VERSION . "\n";
+        $output .= "ENV: " . ENVIRONMENT . "\n";
 
         try {
             $db = \Config\Database::connect();
             $output .= "DB Connected: " . $db->getDatabase() . "\n";
             $tables = $db->listTables();
-            $output .= "Tables: " . implode(', ', $tables) . "\n";
+            $output .= "Tables (" . count($tables) . "): " . implode(', ', $tables) . "\n";
         } catch (\Throwable $e) {
             $output .= "DB Error: " . $e->getMessage() . "\n";
         }
 
-        try {
-            $classFile = APPPATH . 'Controllers/Admin/Auth.php';
-            if (file_exists($classFile)) {
-                $output .= "Admin/Auth.php exists: YES\n";
-                $output .= "File size: " . filesize($classFile) . " bytes\n";
-            } else {
-                $output .= "Admin/Auth.php exists: NO\n";
+        $output .= "\n--- Class Checks ---\n";
+        $classes = [
+            'Admin\\Auth'              => \App\Controllers\Admin\Auth::class,
+            'Admin\\BaseController'    => \App\Controllers\Admin\BaseController::class,
+            'Admin\\Test'              => \App\Controllers\Admin\Test::class,
+            'Admin\\Dashboard'         => \App\Controllers\Admin\Dashboard::class,
+            'Admin\\Users'             => \App\Controllers\Admin\Users::class,
+            'Admin\\Complaints'        => \App\Controllers\Admin\Complaints::class,
+            'Admin\\Logs'              => \App\Controllers\Admin\Logs::class,
+            'UserAuth'                 => \App\Controllers\UserAuth::class,
+            'UserDashboard'            => \App\Controllers\UserDashboard::class,
+            'ComplaintController'      => \App\Controllers\ComplaintController::class,
+            'ComplaintModel'           => \App\Models\ComplaintModel::class,
+            'ActivityLogModel'         => \App\Models\ActivityLogModel::class,
+            'AdminAuth Filter'         => \App\Filters\AdminAuth::class,
+        ];
+
+        foreach ($classes as $label => $fqcn) {
+            try {
+                $output .= "{$label}: " . (class_exists($fqcn) ? 'OK' : 'MISSING') . "\n";
+            } catch (\Throwable $e) {
+                $output .= "{$label}: ERROR - " . $e->getMessage() . "\n";
             }
-        } catch (\Throwable $e) {
-            $output .= "File check error: " . $e->getMessage() . "\n";
         }
 
-        // Check if autoloader finds classes
+        $output .= "\n--- Route Info ---\n";
         try {
-            $output .= "ComplaintModel class: " . (class_exists(\App\Models\ComplaintModel::class) ? 'YES' : 'NO') . "\n";
+            $routes = \Config\Services::routes();
+            $output .= "Route collection loaded OK\n";
         } catch (\Throwable $e) {
-            $output .= "Autoload error: " . $e->getMessage() . "\n";
-        }
-
-        try {
-            $output .= "ActivityLogModel class: " . (class_exists(\App\Models\ActivityLogModel::class) ? 'YES' : 'NO') . "\n";
-        } catch (\Throwable $e) {
-            $output .= "Autoload error: " . $e->getMessage() . "\n";
+            $output .= "Route error: " . $e->getMessage() . "\n";
         }
 
         return $this->response->setBody($output)->setHeader('Content-Type', 'text/plain');
