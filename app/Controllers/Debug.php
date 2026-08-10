@@ -12,35 +12,35 @@ class Debug extends BaseController
         try {
             $db = \Config\Database::connect();
             $output .= "DB Connected: " . $db->getDatabase() . "\n";
-
             $tables = $db->listTables();
             $output .= "Tables: " . implode(', ', $tables) . "\n";
         } catch (\Throwable $e) {
             $output .= "DB Error: " . $e->getMessage() . "\n";
         }
 
-        // Test if admin auth class loads
         try {
-            $auth = new \App\Controllers\Admin\Auth();
-            $output .= "Admin Auth class loaded OK\n";
+            $classFile = APPPATH . 'Controllers/Admin/Auth.php';
+            if (file_exists($classFile)) {
+                $output .= "Admin/Auth.php exists: YES\n";
+                $output .= "File size: " . filesize($classFile) . " bytes\n";
+            } else {
+                $output .= "Admin/Auth.php exists: NO\n";
+            }
         } catch (\Throwable $e) {
-            $output .= "Admin Auth class error: " . $e->getMessage() . "\n";
+            $output .= "File check error: " . $e->getMessage() . "\n";
         }
 
-        // Test if admin BaseController loads
+        // Check if autoloader finds classes
         try {
-            $ref = new \ReflectionClass(\App\Controllers\Admin\BaseController::class);
-            $output .= "Admin BaseController class loaded OK\n";
+            $output .= "ComplaintModel class: " . (class_exists(\App\Models\ComplaintModel::class) ? 'YES' : 'NO') . "\n";
         } catch (\Throwable $e) {
-            $output .= "Admin BaseController class error: " . $e->getMessage() . "\n";
+            $output .= "Autoload error: " . $e->getMessage() . "\n";
         }
 
-        // Test if ComplaintModel loads
         try {
-            $model = new \App\Models\ComplaintModel();
-            $output .= "ComplaintModel loaded OK\n";
+            $output .= "ActivityLogModel class: " . (class_exists(\App\Models\ActivityLogModel::class) ? 'YES' : 'NO') . "\n";
         } catch (\Throwable $e) {
-            $output .= "ComplaintModel error: " . $e->getMessage() . "\n";
+            $output .= "Autoload error: " . $e->getMessage() . "\n";
         }
 
         return $this->response->setBody($output)->setHeader('Content-Type', 'text/plain');
