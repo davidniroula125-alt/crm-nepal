@@ -14,11 +14,20 @@ class UserDashboard extends BaseController
         }
 
         $complaintModel = new ComplaintModel();
-        $complaints = $complaintModel->where('user_id', $userId)->orderBy('created_at', 'DESC')->findAll();
+        $totalComplaints   = $complaintModel->where('user_id', $userId)->countAllResults();
+        $openComplaints    = $complaintModel->where('user_id', $userId)->where('status', 'Open')->countAllResults();
+        $repliedComplaints = $complaintModel->where('user_id', $userId)->where('status', 'Replied')->countAllResults();
+        $closedComplaints  = $complaintModel->where('user_id', $userId)->where('status', 'Closed')->countAllResults();
+        $recentComplaints  = $complaintModel->where('user_id', $userId)->orderBy('created_at', 'DESC')->limit(5)->findAll();
 
         return view('user/dashboard', [
-            'userName'   => session()->get('user_name'),
-            'complaints' => $complaints,
+            'userName'         => session()->get('user_name'),
+            'userEmail'        => session()->get('user_email'),
+            'totalComplaints'  => $totalComplaints,
+            'openComplaints'   => $openComplaints,
+            'repliedComplaints'=> $repliedComplaints,
+            'closedComplaints' => $closedComplaints,
+            'recentComplaints' => $recentComplaints,
         ]);
     }
 }
