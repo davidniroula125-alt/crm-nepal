@@ -5,7 +5,7 @@ services:
     plan: free
     envVars:
       - key: CI_ENVIRONMENT
-        value: production
+        value: development
       - key: app.baseURL
         sync: false
       - key: database.default.hostname
