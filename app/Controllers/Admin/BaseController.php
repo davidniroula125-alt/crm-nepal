@@ -2,18 +2,10 @@
 
 namespace App\Controllers\Admin;
 
-use CodeIgniter\Controller;
-use CodeIgniter\HTTP\RequestInterface;
-use CodeIgniter\HTTP\ResponseInterface;
-use Psr\Log\LoggerInterface;
+use App\Controllers\BaseController as PublicBase;
 
-abstract class BaseController extends Controller
+abstract class BaseController extends PublicBase
 {
-    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
-    {
-        parent::initController($request, $response, $logger);
-    }
-
     protected function currentUser(): ?object
     {
         $userId = session()->get('user_id');
