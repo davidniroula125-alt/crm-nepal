@@ -24,25 +24,38 @@ class Migrate extends BaseController
         }
 
         try {
-            // Create complaints table
-            $db->query("CREATE TABLE IF NOT EXISTS complaints (
-                id SERIAL PRIMARY KEY,
-                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-                subject VARCHAR(200) NOT NULL,
-                message TEXT NOT NULL,
-                admin_reply TEXT NULL,
-                status VARCHAR(20) NOT NULL DEFAULT 'Open' CHECK (status IN ('Open','In Progress','Replied','Closed')),
-                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP NULL
-            )");
-            $output .= "Complaints table created.\n";
+            // Reset admin password to Admin@123
+            $hash = password_hash('Admin@123', PASSWORD_DEFAULT);
+            $db->table('users')->where('email', 'admin@crmsoftwarenepal.com')->update(['password_hash' => $hash]);
+            $output .= "Admin password reset to Admin@123. Rows affected: " . $db->affectedRows() . "\n";
         } catch (\Throwable $e) {
-            $output .= "Complaints table: " . $e->getMessage() . "\n";
+            $output .= "Password reset: " . $e->getMessage() . "\n";
         }
 
-        // Verify
-        $tables = $db->listTables();
-        $output .= "\nAll tables: " . implode(', ', $tables) . "\n";
+        try {
+            // Verify admin user exists and has correct role
+            $admin = $db->table('users')->where('email', 'admin@crmsoftwarenepal.com')->get()->getRow();
+            if ($admin) {
+                $output .= "Admin user found: id={$admin->id}, role={$admin->role}, active={$admin->is_active}\n";
+                if ($admin->role !== 'admin') {
+                    $db->table('users')->where('id', $admin->id)->update(['role' => 'admin']);
+                    $output .= "Fixed admin role.\n";
+                }
+            } else {
+                $output .= "Admin user NOT FOUND! Creating...\n";
+                $db->table('users')->insert([
+                    'name' => 'Administrator',
+                    'email' => 'admin@crmsoftwarenepal.com',
+                    'password_hash' => $hash,
+                    'role' => 'admin',
+                    'is_active' => 1,
+                    'created_at' => date('Y-m-d H:i:s'),
+                ]);
+                $output .= "Admin user created.\n";
+            }
+        } catch (\Throwable $e) {
+            $output .= "Verify: " . $e->getMessage() . "\n";
+        }
 
         return $this->response->setBody($output)->setHeader('Content-Type', 'text/plain');
     }

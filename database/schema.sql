@@ -221,7 +221,7 @@ CREATE TABLE IF NOT EXISTS follow_ups (
 
 -- Insert default admin user (password: Admin@123)
 INSERT INTO users (name, email, password_hash, role, created_at) VALUES
-('Administrator', 'admin@crmsoftwarenepal.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', CURRENT_TIMESTAMP);
+('Administrator', 'admin@crmsoftwarenepal.com', '$2y$12$6Xxte0e5.5HbOAxN.JSDrur8VJBYx1oCBCKYV1JbqKcwwy8Om9l6a', 'admin', CURRENT_TIMESTAMP);
 
 -- Insert default blog categories
 INSERT INTO blog_categories (name, slug) VALUES
