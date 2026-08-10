@@ -7,7 +7,6 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 // ── Public Frontend ──
-$routes->get('migrate', 'Migrate::index');
 $routes->get('/', 'Home::index');
 $routes->get('about-us', 'Pages::about');
 $routes->get('features', 'Pages::features');
@@ -47,7 +46,6 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->get('login', 'Auth::login');
     $routes->post('login', 'Auth::attemptLogin');
     $routes->get('logout', 'Auth::logout');
-    $routes->get('test', 'Test::index');
 
     $routes->group('', ['filter' => 'adminAuth'], function ($routes) {
 

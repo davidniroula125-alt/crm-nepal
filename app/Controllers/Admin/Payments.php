@@ -5,7 +5,6 @@ namespace App\Controllers\Admin;
 use App\Models\PaymentModel;
 use App\Models\InvoiceModel;
 use App\Models\ClientModel;
-use App\Models\SubscriptionModel;
 
 class Payments extends BaseController
 {

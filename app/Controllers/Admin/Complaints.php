@@ -30,10 +30,12 @@ class Complaints extends BaseController
 
         $builder->orderBy('complaints.created_at', 'DESC');
 
-        return view('admin/complaints/index', [
-            'complaints' => $builder->get()->getResult(),
-            'status'     => $status,
-        ]);
+        $data = [];
+        $data['complaints'] = $builder->paginate(20);
+        $data['pager']      = $this->complaintModel->pager;
+        $data['status']     = $status;
+
+        return view('admin/complaints/index', $data);
     }
 
     public function show($id)
@@ -53,7 +55,16 @@ class Complaints extends BaseController
 
     public function reply($id)
     {
+        $complaint = $this->complaintModel->find($id);
+        if (! $complaint) {
+            return redirect()->to('/admin/complaints')->with('error', 'Complaint not found.');
+        }
+
         $reply = $this->request->getPost('admin_reply');
+        if (empty(trim($reply))) {
+            return redirect()->back()->with('error', 'Reply cannot be empty.');
+        }
+
         $this->complaintModel->update($id, [
             'admin_reply' => $reply,
             'replied_at'  => date('Y-m-d H:i:s'),
@@ -66,7 +77,18 @@ class Complaints extends BaseController
 
     public function updateStatus($id)
     {
+        $complaint = $this->complaintModel->find($id);
+        if (! $complaint) {
+            return redirect()->to('/admin/complaints')->with('error', 'Complaint not found.');
+        }
+
         $status = $this->request->getPost('status');
+        $allowed = ['Open', 'In Progress', 'Replied', 'Closed'];
+
+        if (! in_array($status, $allowed)) {
+            return redirect()->back()->with('error', 'Invalid status value.');
+        }
+
         $this->complaintModel->update($id, [
             'status'     => $status,
             'updated_at' => date('Y-m-d H:i:s'),

@@ -14,10 +14,11 @@ class Logs extends BaseController
         $builder->select('activity_logs.*, users.name as user_name');
         $builder->join('users', 'users.id = activity_logs.user_id', 'left');
         $builder->orderBy('activity_logs.created_at', 'DESC');
-        $builder->limit(200);
 
-        return view('admin/logs/index', [
-            'logs' => $builder->get()->getResult(),
-        ]);
+        $data = [];
+        $data['logs']  = $builder->paginate(50);
+        $data['pager'] = $logModel->pager;
+
+        return view('admin/logs/index', $data);
     }
 }

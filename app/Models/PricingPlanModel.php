@@ -37,7 +37,6 @@ class PricingPlanModel extends Model
     public function getActivePlans(): array
     {
         return $this->where('is_active', 1)
-            ->where('billing_cycle', 'Monthly')
             ->orderBy('sort_order', 'ASC')
             ->findAll();
     }

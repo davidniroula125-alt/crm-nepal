@@ -233,7 +233,7 @@ class Reports extends BaseController
             ->selectSum('amount')
             ->where('status', 'Paid')
             ->where('paid_at >=', $startDate)
-            .where('paid_at <=', $endDateTime)
+            ->where('paid_at <=', $endDateTime)
             ->get()
             ->getRow()
             ->amount ?? 0;

@@ -23,9 +23,10 @@ class Faqs extends BaseController
             $builder = $builder->where('category', $category);
         }
 
+        $data = [];
         $data['faqs']            = $builder->paginate(20);
         $data['pager']           = $this->model->pager;
-        $data['total']           = $this->model->countAllResults();
+        $data['total']           = $builder->countAllResults(false);
         $data['currentCategory'] = $category ?? '';
 
         return view('admin/faqs/index', $data);

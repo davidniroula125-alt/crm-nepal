@@ -57,4 +57,10 @@
     </table>
 </div>
 
+<?php if (isset($pager) && $pager->getTotalPages() > 1): ?>
+<div class="admin-pagination">
+    <?= $pager->links() ?>
+</div>
+<?php endif; ?>
+
 <?= $this->endSection() ?>

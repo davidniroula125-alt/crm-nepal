@@ -23,9 +23,10 @@ class Testimonials extends BaseController
             $builder = $builder->where('is_published', (int) $published);
         }
 
+        $data = [];
         $data['testimonials']    = $builder->paginate(20);
         $data['pager']           = $this->model->pager;
-        $data['total']           = $this->model->countAllResults();
+        $data['total']           = $builder->countAllResults(false);
         $data['currentPublished'] = $published ?? '';
 
         return view('admin/testimonials/index', $data);
