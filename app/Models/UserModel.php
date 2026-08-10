@@ -23,14 +23,14 @@ class UserModel extends Model
         'failed_login_attempts',
         'locked_until',
         'remember_token',
+        'created_at',
         'updated_at',
     ];
 
     protected $useTimestamps = false;
 
     protected $validationRules = [
-        'email'    => 'required|valid_email|is_unique[users.email]',
-        'password' => 'required|min_length[8]',
+        'email' => 'required|valid_email|is_unique[users.email]',
     ];
 
     protected $validationMessages = [
