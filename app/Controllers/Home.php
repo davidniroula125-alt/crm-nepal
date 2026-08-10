@@ -6,8 +6,13 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        $siteModel = model(\App\Models\SiteContentModel::class);
-        $content = $siteModel->getPageContent('home');
+        $content = [];
+        try {
+            $siteModel = model(\App\Models\SiteContentModel::class);
+            $content = $siteModel->getPageContent('home');
+        } catch (\Throwable $e) {
+            // Table may not exist yet
+        }
 
         $data = $this->siteData([
             'metaTitle'       => ($content['settings']['site_name'] ?? 'CRM Software Nepal') . ' | Powerful CRM for Travel & Trekking Agencies',

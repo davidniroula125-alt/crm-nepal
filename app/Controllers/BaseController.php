@@ -26,8 +26,13 @@ abstract class BaseController extends Controller
      */
     protected function siteData(array $extra = []): array
     {
-        $siteModel = model(\App\Models\SiteContentModel::class);
-        $settings = $siteModel->getPageContent('settings');
+        $settings = [];
+        try {
+            $siteModel = model(\App\Models\SiteContentModel::class);
+            $settings = $siteModel->getPageContent('settings');
+        } catch (\Throwable $e) {
+            // Table may not exist yet; use defaults
+        }
 
         return array_merge([
             'siteName'   => $settings['general']['site_name'] ?? 'CRM Software Nepal',

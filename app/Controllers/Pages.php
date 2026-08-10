@@ -14,8 +14,13 @@ class Pages extends BaseController
 {
     protected function pageData(string $slug, array $extra = []): array
     {
-        $siteModel = model(SiteContentModel::class);
-        $content = $siteModel->getPageContent($slug);
+        $content = [];
+        try {
+            $siteModel = model(SiteContentModel::class);
+            $content = $siteModel->getPageContent($slug);
+        } catch (\Throwable $e) {
+            // Table may not exist yet
+        }
         return $this->siteData(array_merge([
             'pageContent' => $content,
         ], $extra));
