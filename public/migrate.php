@@ -1,7 +1,18 @@
 <?php
-$connStr = 'pgsql:host=dpg-d9sa7o142hec73bv25b0-a.oregon-postgres.render.com;port=5432;dbname=crm_software_nepal';
+$host = getenv('database.default.hostname');
+$port = getenv('database.default.port');
+$db   = getenv('database.default.database');
+$user = getenv('database.default.username');
+$pass = getenv('database.default.password');
+
+echo "Host: $host\nPort: $port\nDB: $db\nUser: $user\nPass: " . ($pass ? 'SET' : 'EMPTY') . "\n\n";
+
+$connStr = "pgsql:host=$host;port=$port;dbname=$db";
 try {
-    $pdo = new PDO($connStr, 'crm_software_nepal_user', 'AoDYhnnMLmRjSrxIOTtkBjqBoa8xnUJE', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+    $pdo = new PDO($connStr, $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::PGSQL_ATTR_SSLMODE => PDO::PGSQL_SSLMODE_REQUIRE,
+    ]);
     echo "Connected!\n";
     $schema = file_get_contents(__DIR__ . '/../database/schema.sql');
     $pdo->exec($schema);
