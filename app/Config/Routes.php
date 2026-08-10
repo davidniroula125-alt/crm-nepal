@@ -48,6 +48,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->get('login', 'Auth::login');
     $routes->post('login', 'Auth::attemptLogin');
     $routes->get('logout', 'Auth::logout');
+    $routes->get('test', 'Test::index');
 
     $routes->group('', ['filter' => 'adminAuth'], function ($routes) {
 
@@ -162,6 +163,5 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
         // Settings
         $routes->get('settings', 'Settings::index');
         $routes->post('settings/update', 'Settings::update');
-        $routes->get('test', 'Test::index');
     });
 });
