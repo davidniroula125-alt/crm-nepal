@@ -8,7 +8,7 @@
 </div>
 
 <div class="admin-form-wrapper">
-    <form method="POST" action="<?= site_url('/admin/clients') ?>">
+    <form method="POST" action="<?= site_url('/admin/clients/store') ?>">
         <?= csrf_field() ?>
 
         <div class="form-group">
@@ -66,7 +66,7 @@
                     <?php foreach ($leads as $lead): ?>
                         <option value="<?= esc($lead->id) ?>"
                             <?= old('lead_id') == $lead->id ? 'selected' : '' ?>>
-                            <?= esc($lead->first_name . ' ' . $lead->last_name . ' (' . $lead->email . ')') ?>
+                            <?= esc($lead->full_name . ' (' . $lead->email . ')') ?>
                         </option>
                     <?php endforeach; ?>
                 <?php endif; ?>

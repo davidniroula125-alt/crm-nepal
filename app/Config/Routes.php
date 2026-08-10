@@ -47,6 +47,9 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->post('login', 'Auth::attemptLogin');
     $routes->get('logout', 'Auth::logout');
 
+    // DB Init — visit once after deploy, then remove or protect
+    $routes->get('init', 'Init::index');
+
     $routes->group('', ['filter' => 'adminAuth'], function ($routes) {
 
         $routes->get('dashboard', 'Dashboard::index');
@@ -110,6 +113,12 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 
         // Reports
         $routes->get('reports', 'Reports::index');
+        $routes->get('reports/leads', 'Reports::leadReport');
+        $routes->get('reports/sales', 'Reports::salesReport');
+        $routes->get('reports/revenue', 'Reports::revenueReport');
+        $routes->get('reports/payments', 'Reports::paymentReport');
+        $routes->get('reports/clients', 'Reports::clientReport');
+        $routes->get('reports/staff', 'Reports::staffReport');
 
         // Testimonials
         $routes->get('testimonials', 'Testimonials::index');
@@ -147,6 +156,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
         $routes->post('users/(:num)/update', 'Users::update/$1');
         $routes->post('users/(:num)/delete', 'Users::delete/$1');
         $routes->post('users/(:num)/toggle-status', 'Users::toggleStatus/$1');
+        $routes->post('users/(:num)/role', 'Users::updateRole/$1');
 
         // Complaints (admin only)
         $routes->get('complaints', 'Complaints::index');

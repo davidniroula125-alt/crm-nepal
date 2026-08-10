@@ -15,27 +15,38 @@ class Site extends BaseController
 
     public function index()
     {
-        $slug = $this->request->getGet('page') ?? 'home';
-        $content = $this->model->getPageContent($slug);
+        try {
+            $slug = $this->request->getGet('page') ?? 'home';
 
-        $pages = [
-            'home'      => 'Home Page',
-            'about'     => 'About Page',
-            'features'  => 'Features Page',
-            'solutions' => 'Solutions Page',
-            'pricing'   => 'Pricing Page',
-            'faq'       => 'FAQ Page',
-            'contact'   => 'Contact Page',
-            'demo'      => 'Demo Page',
-            'settings'  => 'Site Settings',
-        ];
+            $pages = [
+                'home'      => 'Home Page',
+                'about'     => 'About Page',
+                'features'  => 'Features Page',
+                'solutions' => 'Solutions Page',
+                'pricing'   => 'Pricing Page',
+                'faq'       => 'FAQ Page',
+                'contact'   => 'Contact Page',
+                'demo'      => 'Demo Page',
+                'settings'  => 'Site Settings',
+            ];
 
-        return view('admin/site/index', [
-            'pageTitle' => 'Site Content',
-            'pages'     => $pages,
-            'currentPage' => $slug,
-            'content'   => $content,
-        ]);
+            try {
+                $content = $this->model->getPageContent($slug);
+            } catch (\Throwable $e) {
+                log_message('error', 'Site content query error: ' . $e->getMessage());
+                $content = [];
+            }
+
+            return view('admin/site/index', [
+                'pageTitle' => 'Site Content',
+                'pages'     => $pages,
+                'currentPage' => $slug,
+                'content'   => $content,
+            ]);
+        } catch (\Throwable $e) {
+            log_message('error', 'Site index error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+            return $this->response->setStatusCode(500)->setBody('Site Error: ' . $e->getMessage())->setHeader('Content-Type', 'text/plain');
+        }
     }
 
     public function update()
@@ -43,21 +54,24 @@ class Site extends BaseController
         $slug    = $this->request->getPost('slug');
         $updates = $this->request->getPost('content');
 
-        if (! empty($updates) && is_array($updates)) {
-            foreach ($updates as $section => $fields) {
-                if (is_array($fields)) {
-                    foreach ($fields as $key => $value) {
-                        $type = 'text';
-                        if (is_array($value)) {
-                            $type = $value['type'] ?? 'text';
-                            $value = $value['value'] ?? '';
+        try {
+            if (! empty($updates) && is_array($updates)) {
+                foreach ($updates as $section => $fields) {
+                    if (is_array($fields)) {
+                        foreach ($fields as $key => $value) {
+                            $type = 'text';
+                            if (is_array($value)) {
+                                $type = $value['type'] ?? 'text';
+                                $value = $value['value'] ?? '';
+                            }
+                            $this->model->setContent($slug, $section, $key, $value, $type);
                         }
-                        $this->model->setContent($slug, $section, $key, $value, $type);
                     }
                 }
             }
+            return redirect()->to("/admin/site?page={$slug}")->with('success', 'Site content updated successfully.');
+        } catch (\Throwable $e) {
+            return redirect()->to("/admin/site?page={$slug}")->with('error', 'Failed to update: ' . $e->getMessage());
         }
-
-        return redirect()->to("/admin/site?page={$slug}")->with('success', 'Site content updated successfully.');
     }
 }

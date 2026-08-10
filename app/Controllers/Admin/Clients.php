@@ -23,9 +23,14 @@ class Clients extends BaseController
         $page   = max((int) ($this->request->getGet('page') ?? 1), 1);
         $perPage = 20;
 
-        $query = $this->clientModel->searchByName($search)->filterByStatus($status);
-        $total = $this->clientModel->countAllFiltered($search, $status);
-        $clients = $query->orderBy('id', 'DESC')->paginate($perPage, 'default', $page);
+        try {
+            $query = $this->clientModel->searchByName($search)->filterByStatus($status);
+            $total = $this->clientModel->countAllFiltered($search, $status);
+            $clients = $query->orderBy('id', 'DESC')->paginate($perPage, 'default', $page);
+        } catch (\Throwable $e) {
+            $clients = [];
+            $total   = 0;
+        }
 
         $data = [
             'pageTitle'   => 'Clients',
@@ -41,11 +46,16 @@ class Clients extends BaseController
 
     public function create()
     {
-        $leadModel = new LeadModel();
+        try {
+            $leadModel = new LeadModel();
+            $leads = $leadModel->orderBy('id', 'DESC')->findAll();
+        } catch (\Throwable $e) {
+            $leads = [];
+        }
 
         $data = [
             'pageTitle' => 'Add New Client',
-            'leads'     => $leadModel->orderBy('id', 'DESC')->findAll(),
+            'leads'     => $leads,
         ];
 
         return view('admin/clients/create', $data);
@@ -97,14 +107,21 @@ class Clients extends BaseController
             return redirect()->to('/admin/clients')->with('error', 'Client not found.');
         }
 
-        $subscriptionModel = new SubscriptionModel();
-        $paymentModel      = new PaymentModel();
+        try {
+            $subscriptionModel = new SubscriptionModel();
+            $paymentModel      = new PaymentModel();
+            $subscriptions = $subscriptionModel->where('client_id', $id)->orderBy('id', 'DESC')->findAll();
+            $payments      = $paymentModel->where('client_id', $id)->orderBy('id', 'DESC')->findAll();
+        } catch (\Throwable $e) {
+            $subscriptions = [];
+            $payments      = [];
+        }
 
         $data = [
             'pageTitle'     => 'Client Details',
             'client'        => $client,
-            'subscriptions' => $subscriptionModel->where('client_id', $id)->orderBy('id', 'DESC')->findAll(),
-            'payments'      => $paymentModel->where('client_id', $id)->orderBy('id', 'DESC')->findAll(),
+            'subscriptions' => $subscriptions,
+            'payments'      => $payments,
         ];
 
         return view('admin/clients/show', $data);
@@ -118,12 +135,17 @@ class Clients extends BaseController
             return redirect()->to('/admin/clients')->with('error', 'Client not found.');
         }
 
-        $leadModel = new LeadModel();
+        try {
+            $leadModel = new LeadModel();
+            $leads = $leadModel->orderBy('id', 'DESC')->findAll();
+        } catch (\Throwable $e) {
+            $leads = [];
+        }
 
         $data = [
             'pageTitle' => 'Edit Client',
             'client'    => $client,
-            'leads'     => $leadModel->orderBy('id', 'DESC')->findAll(),
+            'leads'     => $leads,
         ];
 
         return view('admin/clients/edit', $data);

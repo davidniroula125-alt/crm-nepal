@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Models\LeadModel;
+use App\Models\ClientModel;
 use App\Models\UserModel;
 use App\Models\ActivityLogModel;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -246,6 +247,11 @@ class Leads extends BaseController
                 (int) $id
             );
 
+            // Auto-create client when lead is converted via edit form
+            if (($leadData['status'] ?? '') === 'Converted' && $lead->status !== 'Converted') {
+                $this->convertLeadToClient((object) array_merge((array) $lead, $leadData));
+            }
+
             return redirect()->to('/admin/leads/' . $id)
                 ->with('success', 'Lead updated successfully.');
         }
@@ -329,6 +335,11 @@ class Leads extends BaseController
                 'leads',
                 (int) $id
             );
+
+            // Auto-create client when lead is converted
+            if ($status === 'Converted') {
+                $this->convertLeadToClient($lead);
+            }
 
             return $this->response->setJSON([
                 'success' => true,
@@ -416,5 +427,45 @@ class Leads extends BaseController
 
         fclose($output);
         exit;
+    }
+
+    /**
+     * Create a client from a converted lead.
+     * Skips if a client with the same lead_id already exists.
+     */
+    protected function convertLeadToClient(object $lead): void
+    {
+        try {
+            $clientModel = new ClientModel();
+
+            // Don't create duplicate client if one already linked to this lead
+            $existing = $clientModel->where('lead_id', $lead->id)->first();
+            if ($existing) {
+                return;
+            }
+
+            $clientData = [
+                'lead_id'      => $lead->id,
+                'company_name' => $lead->company_name ?: $lead->full_name,
+                'contact_name' => $lead->full_name,
+                'email'        => $lead->email ?? '',
+                'phone'        => $lead->phone ?? '',
+                'status'       => 'Active',
+                'created_at'   => date('Y-m-d H:i:s'),
+            ];
+
+            $clientId = $clientModel->insert($clientData);
+
+            if ($clientId) {
+                $this->activityLog->log(
+                    session()->get('user_id'),
+                    'Auto-created client from lead',
+                    'clients',
+                    $clientId
+                );
+            }
+        } catch (\Throwable $e) {
+            // Silently fail — don't block the lead status update
+        }
     }
 }

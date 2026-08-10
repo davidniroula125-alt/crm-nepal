@@ -36,10 +36,14 @@ class Dashboard extends BaseController
         $newInquiries    = $db->table('contact_inquiries')->where('status', 'New')->countAllResults();
 
         // ── Follow-ups ──
-        $pendingFollowUps = $db->table('follow_ups')
-            ->where('status', 'Pending')
-            ->where('due_at >=', date('Y-m-d H:i:s'))
-            ->countAllResults();
+        try {
+            $pendingFollowUps = $db->table('follow_ups')
+                ->where('status', 'Pending')
+                ->where('due_at >=', date('Y-m-d H:i:s'))
+                ->countAllResults();
+        } catch (\Throwable $e) {
+            $pendingFollowUps = 0;
+        }
 
         // ── Demo Requests ──
         $upcomingDemos = $db->table('demo_requests')
@@ -78,13 +82,17 @@ class Dashboard extends BaseController
         $openTickets  = $db->table('support_tickets')->where('status', 'Open')->countAllResults();
 
         // ── Recent Activities (last 10) ──
-        $recentActivities = $db->table('activity_logs')
-            ->select('activity_logs.*, users.name as user_name')
-            ->join('users', 'users.id = activity_logs.user_id', 'left')
-            ->orderBy('activity_logs.created_at', 'DESC')
-            ->limit(10)
-            ->get()
-            ->getResult();
+        try {
+            $recentActivities = $db->table('activity_logs')
+                ->select('activity_logs.*, users.name as user_name')
+                ->join('users', 'users.id = activity_logs.user_id', 'left')
+                ->orderBy('activity_logs.created_at', 'DESC')
+                ->limit(10)
+                ->get()
+                ->getResult();
+        } catch (\Throwable $e) {
+            $recentActivities = [];
+        }
 
         // ── Latest Leads (last 5) ──
         $latestLeads = $db->table('leads')

@@ -33,23 +33,16 @@
                         <td><?= esc($user->name) ?></td>
                         <td><?= esc($user->email) ?></td>
                         <td>
-                            <?php
-                            $roleBadge = 'secondary';
-                            if ($user->role === 'admin') {
-                                $roleBadge = 'danger';
-                            } elseif ($user->role === 'editor') {
-                                $roleBadge = 'info';
-                            } elseif ($user->role === 'sales') {
-                                $roleBadge = 'primary';
-                            } elseif ($user->role === 'support') {
-                                $roleBadge = 'warning';
-                            } elseif ($user->role === 'user') {
-                                $roleBadge = 'secondary';
-                            }
-                            ?>
-                            <span class="badge badge-<?= $roleBadge ?>">
-                                <?= esc(ucfirst($user->role)) ?>
-                            </span>
+                            <form method="POST" action="<?= site_url("/admin/users/{$user->id}/role") ?>" style="display:inline-flex;gap:4px;align-items:center;">
+                                <?= csrf_field() ?>
+                                <select name="role" class="form-control" style="width:auto;padding:4px 8px;font-size:.82rem;" onchange="this.form.submit()">
+                                    <option value="admin" <?= $user->role === 'admin' ? 'selected' : '' ?>>Admin</option>
+                                    <option value="editor" <?= $user->role === 'editor' ? 'selected' : '' ?>>Editor</option>
+                                    <option value="sales" <?= $user->role === 'sales' ? 'selected' : '' ?>>Sales</option>
+                                    <option value="support" <?= $user->role === 'support' ? 'selected' : '' ?>>Support</option>
+                                    <option value="user" <?= $user->role === 'user' ? 'selected' : '' ?>>User</option>
+                                </select>
+                            </form>
                         </td>
                         <td>
                             <form method="POST" action="<?= site_url("/admin/users/{$user->id}/toggle-status") ?>" style="display:inline;">

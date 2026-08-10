@@ -18,8 +18,13 @@ class Users extends BaseController
         $page   = max((int) ($this->request->getGet('page') ?? 1), 1);
         $perPage = 20;
 
-        $users = $this->userModel->orderBy('id', 'DESC')->paginate($perPage, 'default', $page);
-        $total = $this->userModel->countAllResults();
+        try {
+            $users = $this->userModel->orderBy('id', 'DESC')->paginate($perPage, 'default', $page);
+            $total = $this->userModel->countAllResults();
+        } catch (\Throwable $e) {
+            $users = [];
+            $total = 0;
+        }
 
         $data = [
             'pageTitle' => 'Users',
@@ -188,5 +193,28 @@ class Users extends BaseController
         $label = $newStatus ? 'activated' : 'deactivated';
 
         return redirect()->to("/admin/users/{$id}")->with('success', "User {$label} successfully.");
+    }
+
+    public function updateRole($id)
+    {
+        $user = $this->userModel->find($id);
+
+        if (! $user) {
+            return redirect()->to('/admin/users')->with('error', 'User not found.');
+        }
+
+        $role = $this->request->getPost('role');
+        $allowed = ['admin', 'editor', 'sales', 'support', 'user'];
+
+        if (! in_array($role, $allowed)) {
+            return redirect()->back()->with('error', 'Invalid role.');
+        }
+
+        $this->userModel->update($id, [
+            'role'      => $role,
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        return redirect()->back()->with('success', "Role changed to " . ucfirst($role) . ".");
     }
 }

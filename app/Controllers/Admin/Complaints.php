@@ -18,24 +18,28 @@ class Complaints extends BaseController
 
     public function index()
     {
-        $status = $this->request->getGet('status');
+        try {
+            $status = $this->request->getGet('status');
 
-        $builder = $this->complaintModel->builder();
-        $builder->select('complaints.*, users.name as user_name, users.email as user_email');
-        $builder->join('users', 'users.id = complaints.user_id', 'left');
+            $this->complaintModel->select('complaints.*, users.name as user_name, users.email as user_email');
+            $this->complaintModel->join('users', 'users.id = complaints.user_id', 'left');
 
-        if ($status) {
-            $builder->where('complaints.status', $status);
+            if ($status) {
+                $this->complaintModel->where('complaints.status', $status);
+            }
+
+            $this->complaintModel->orderBy('complaints.created_at', 'DESC');
+
+            $data = [];
+            $data['complaints'] = $this->complaintModel->paginate(20);
+            $data['pager']      = $this->complaintModel->pager;
+            $data['status']     = $status;
+
+            return view('admin/complaints/index', $data);
+        } catch (\Throwable $e) {
+            log_message('error', 'Complaints index error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+            return $this->response->setStatusCode(500)->setBody('Complaints Error: ' . esc($e->getMessage()) . ' in ' . esc($e->getFile()) . ':' . $e->getLine())->setHeader('Content-Type', 'text/plain');
         }
-
-        $builder->orderBy('complaints.created_at', 'DESC');
-
-        $data = [];
-        $data['complaints'] = $builder->paginate(20);
-        $data['pager']      = $this->complaintModel->pager;
-        $data['status']     = $status;
-
-        return view('admin/complaints/index', $data);
     }
 
     public function show($id)

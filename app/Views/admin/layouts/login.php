@@ -63,7 +63,7 @@ body{font-family:var(--font);color:var(--text);min-height:100vh;display:flex}
 
 <div class="login-left">
   <div class="login-left-content">
-    <a href="<?= site_url('/') ?>"><img src="<?= site_url('assets/images/logo.png') ?>" alt="CRM Software Nepal"></a>
+    <a href="/"><img src="/assets/images/logo.png" alt="CRM Software Nepal"></a>
     <h2>Admin Control Panel</h2>
     <p>Manage your CRM, track leads, monitor payments, and oversee your entire business from one powerful dashboard.</p>
     <div class="login-features">
@@ -90,7 +90,7 @@ body{font-family:var(--font);color:var(--text);min-height:100vh;display:flex}
 <div class="login-right">
   <div class="login-card">
     <div class="login-brand-mobile">
-      <a href="<?= site_url('/') ?>"><img src="<?= site_url('assets/images/logo.png') ?>" alt="CRM Software Nepal"></a>
+      <a href="/"><img src="/assets/images/logo.png" alt="CRM Software Nepal"></a>
       <p>Admin Panel Login</p>
     </div>
 

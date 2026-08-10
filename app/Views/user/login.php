@@ -56,7 +56,7 @@ body{font-family:var(--font);color:var(--text);min-height:100vh;display:flex}
 
 <div class="login-left">
   <div class="login-left-content">
-    <a href="<?= site_url('/') ?>"><img src="<?= site_url('assets/images/logo.png') ?>" alt="CRM Software Nepal"></a>
+    <a href="/"><img src="/assets/images/logo.png" alt="CRM Software Nepal"></a>
     <h2>Grow Your Travel Business</h2>
     <p>Access your CRM dashboard to manage leads, track payments, and grow your travel agency.</p>
     <div class="login-features">
@@ -79,7 +79,7 @@ body{font-family:var(--font);color:var(--text);min-height:100vh;display:flex}
 <div class="login-right">
   <div class="login-card">
     <div class="login-brand-mobile">
-      <a href="<?= site_url('/') ?>"><img src="<?= site_url('assets/images/logo.png') ?>" alt="CRM Software Nepal"></a>
+      <a href="/"><img src="/assets/images/logo.png" alt="CRM Software Nepal"></a>
       <p>Log in to your account</p>
     </div>
 
