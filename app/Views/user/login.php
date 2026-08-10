@@ -35,7 +35,7 @@ h2{font-family:var(--font-h);font-size:20px;text-align:center;color:var(--primar
 <body>
 <div class="card">
   <div class="brand">
-    <img src="<?= site_url('assets/images/logo.svg') ?>" alt="CRM Software Nepal">
+    <img src="<?= site_url('assets/images/logo.png') ?>" alt="CRM Software Nepal">
     <p>Log in to your account</p>
   </div>
 

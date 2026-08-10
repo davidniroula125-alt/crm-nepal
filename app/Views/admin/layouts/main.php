@@ -13,7 +13,7 @@
 
 <aside class="admin-sidebar" id="adminSidebar">
     <div class="sidebar-header">
-        <a href="<?= base_url('/') ?>" class="sidebar-logo"><img src="<?= base_url('assets/images/logo.svg') ?>" alt="CRM Nepal" height="32" style="filter:brightness(1.3);"></a>
+        <a href="<?= base_url('/') ?>" class="sidebar-logo"><img src="<?= base_url('assets/images/logo.png') ?>" alt="CRM Nepal" height="32" style="filter:brightness(1.3);"></a>
         <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close sidebar">&times;</button>
     </div>
 

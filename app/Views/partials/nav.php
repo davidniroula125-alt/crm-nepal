@@ -1,7 +1,7 @@
 <header class="site-header">
     <div class="navbar">
         <a href="<?= site_url('/') ?>" class="navbar__logo">
-            <img src="<?= base_url('assets/images/logo.svg') ?>" alt="CRM Software Nepal" height="44">
+            <img src="<?= base_url('assets/images/logo.png') ?>" alt="CRM Software Nepal" height="44">
         </a>
         <nav class="navbar__links" id="navLinks">
             <a href="<?= site_url('/') ?>">Home</a>

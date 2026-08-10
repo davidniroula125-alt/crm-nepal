@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="container footer__grid">
         <div class="footer__brand">
-            <img src="<?= base_url('assets/images/logo.svg') ?>" alt="CRM Software Nepal" height="36" style="filter:brightness(2);margin-bottom:12px;">
+            <img src="<?= base_url('assets/images/logo.png') ?>" alt="CRM Software Nepal" height="36" style="filter:brightness(2);margin-bottom:12px;">
             <p><?= esc($footerDesc ?? 'CRM Software Nepal helps travel agencies, trekking agencies, tour operators and DMCs manage leads, customers, bookings, payments and follow-ups in one place.') ?></p>
         </div>
         <div class="footer__col">

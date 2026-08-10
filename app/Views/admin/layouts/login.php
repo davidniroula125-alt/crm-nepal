@@ -200,7 +200,7 @@
 <div class="login-wrapper">
   <div class="login-card">
     <div class="login-brand">
-      <img src="<?= site_url('assets/images/logo.svg') ?>" alt="CRM Software Nepal">
+      <img src="<?= site_url('assets/images/logo.png') ?>" alt="CRM Software Nepal">
       <p>Admin Panel Login</p>
     </div>
     <?= $this->renderSection('content') ?>
