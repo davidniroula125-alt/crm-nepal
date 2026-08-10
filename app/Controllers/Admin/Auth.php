@@ -22,11 +22,7 @@ class Auth extends BaseController
      */
     public function login()
     {
-        if (session()->get('user_id')) {
-            return redirect()->to('/admin/dashboard');
-        }
-
-        return view('admin/auth/login');
+        return "Admin Auth controller loaded OK. PHP: " . PHP_VERSION;
     }
 
     /**
@@ -123,7 +119,7 @@ class Auth extends BaseController
      */
     public function forgotPassword()
     {
-        return view('admin/auth/forgot_password');
+        return "forgotPassword OK";
     }
 
     /**
