@@ -14,10 +14,12 @@ class PricingPlanModel extends Model
 
     protected $allowedFields = [
         'name',
+        'billing_cycle',
+        'price',
         'description',
-        'price_monthly',
-        'price_annual',
-        'status',
+        'features',
+        'is_active',
+        'sort_order',
         'created_at',
     ];
 
@@ -25,14 +27,18 @@ class PricingPlanModel extends Model
 
     protected $validationRules = [
         'name'          => 'required|max_length[255]',
+        'billing_cycle' => 'required|in_list[Monthly,Annual]',
+        'price'         => 'required|decimal',
         'description'   => 'permit_empty',
-        'price_monthly' => 'required|decimal',
-        'price_annual'  => 'permit_empty|decimal',
-        'status'        => 'required|in_list[active,inactive]',
+        'features'      => 'permit_empty',
+        'is_active'     => 'required|in_list[0,1]',
     ];
 
     public function getActivePlans(): array
     {
-        return $this->where('status', 'active')->orderBy('name', 'ASC')->findAll();
+        return $this->where('is_active', 1)
+            ->where('billing_cycle', 'Monthly')
+            ->orderBy('sort_order', 'ASC')
+            ->findAll();
     }
 }

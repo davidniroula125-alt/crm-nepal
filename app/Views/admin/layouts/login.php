@@ -8,25 +8,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --color-primary: #0F6E63;
-    --color-primary-dark: #0A4F47;
-    --color-primary-light: #E4F3F1;
-    --color-accent: #F2994A;
-    --color-accent-dark: #D97F2E;
+    --color-primary: #1B3A6B;
+    --color-primary-dark: #132C52;
+    --color-primary-light: #E8EFF8;
+    --color-primary-mid: #4A90D9;
+    --color-accent: #DC3545;
+    --color-accent-dark: #B52D3A;
     --color-text: #1F2A2E;
     --color-text-muted: #5B6B6E;
     --color-bg: #FFFFFF;
-    --color-bg-alt: #F7FAF9;
-    --color-border: #E1E8E7;
+    --color-bg-alt: #F4F7FB;
+    --color-border: #D8E2EC;
     --color-success: #2E9E5B;
-    --color-danger: #D64545;
+    --color-danger: #DC3545;
     --color-warning: #E0A72E;
     --font-heading: 'Poppins', 'Segoe UI', sans-serif;
     --font-body: 'Inter', 'Segoe UI', sans-serif;
     --radius-sm: 6px;
     --radius-md: 12px;
-    --shadow-sm: 0 1px 3px rgba(15, 110, 99, 0.08);
-    --shadow-md: 0 8px 24px rgba(15, 110, 99, 0.12);
+    --shadow-sm: 0 1px 3px rgba(27, 58, 107, 0.08);
+    --shadow-md: 0 8px 24px rgba(27, 58, 107, 0.12);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,7 +35,7 @@
   body {
     font-family: var(--font-body);
     color: var(--color-text);
-    background: var(--color-bg-alt);
+    background: linear-gradient(135deg, #E8EFF8 0%, #F4F7FB 50%, #E0EAF6 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -60,14 +61,10 @@
     margin-bottom: 32px;
   }
 
-  .login-brand h1 {
-    font-family: var(--font-heading);
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--color-primary-dark);
+  .login-brand img {
+    height: 48px;
+    margin-bottom: 8px;
   }
-
-  .login-brand h1 span { color: var(--color-accent); }
 
   .login-brand p {
     font-size: 14px;
@@ -101,8 +98,8 @@
   }
 
   .form-control:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(15, 110, 99, 0.1);
+    border-color: var(--color-primary-mid);
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.15);
   }
 
   .form-check {
@@ -136,16 +133,18 @@
     font-size: 15px;
     border: 2px solid transparent;
     cursor: pointer;
-    transition: .15s ease;
+    transition: .2s ease;
   }
 
   .btn-primary {
-    background: var(--color-primary);
+    background: linear-gradient(135deg, #1B3A6B 0%, #2A5298 100%);
     color: #fff;
   }
 
   .btn-primary:hover {
-    background: var(--color-primary-dark);
+    background: linear-gradient(135deg, #132C52 0%, #1B3A6B 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(27, 58, 107, 0.3);
   }
 
   .login-links {
@@ -155,7 +154,7 @@
 
   .login-links a {
     font-size: 14px;
-    color: var(--color-primary);
+    color: var(--color-primary-mid);
     font-weight: 500;
   }
 
@@ -200,6 +199,10 @@
 
 <div class="login-wrapper">
   <div class="login-card">
+    <div class="login-brand">
+      <img src="<?= site_url('assets/images/logo.svg') ?>" alt="CRM Software Nepal">
+      <p>Admin Panel Login</p>
+    </div>
     <?= $this->renderSection('content') ?>
   </div>
   <div class="back-home">

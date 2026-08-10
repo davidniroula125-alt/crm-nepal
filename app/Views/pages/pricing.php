@@ -36,9 +36,8 @@
                 <h3 style="font-size:22px;margin-bottom:4px;"><?= esc($plan->name) ?></h3>
                 <p style="color:var(--color-text-muted);font-size:14px;margin-bottom:16px;"><?= esc($plan->description) ?></p>
                 <div style="margin-bottom:20px;">
-                    <span class="price-monthly" style="font-size:36px;font-weight:700;color:var(--color-primary);">NPR <?= number_format($plan->price_monthly) ?></span>
-                    <span class="price-annual" style="font-size:36px;font-weight:700;color:var(--color-primary);display:none;">NPR <?= number_format($plan->price_annual ?? $plan->price_monthly) ?></span>
-                    <span class="price-cycle" style="font-size:14px;color:var(--color-text-muted);">/month</span>
+                    <span style="font-size:36px;font-weight:700;color:var(--color-primary);">NPR <?= number_format($plan->price) ?></span>
+                    <span style="font-size:14px;color:var(--color-text-muted);">/<?= esc(strtolower($plan->billing_cycle)) ?></span>
                 </div>
                 <ul style="text-align:left;margin-bottom:24px;">
                     <li style="padding:6px 0;font-size:14px;color:var(--color-text-muted);">✓ Full CRM access</li>

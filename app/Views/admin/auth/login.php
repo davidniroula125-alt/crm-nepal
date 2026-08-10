@@ -2,11 +2,6 @@
 
 <?= $this->section('content') ?>
 
-<div class="login-brand">
-  <h1>CRM <span>Nepal</span></h1>
-  <p>Admin Panel Login</p>
-</div>
-
 <?php if (session()->getFlashdata('error')): ?>
   <div class="alert alert-error"><?= session()->getFlashdata('error') ?></div>
 <?php endif; ?>

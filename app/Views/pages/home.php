@@ -13,7 +13,11 @@
             </div>
         </div>
         <div class="hero__mock">
-            Product dashboard screenshot placeholder<br>(swap with real UI screenshot)
+            <div style="position:relative;z-index:1">
+                <div style="font-size:48px;margin-bottom:12px;">&#128202;</div>
+                <div style="font-weight:600;font-size:16px;color:#fff;margin-bottom:4px;">CRM Dashboard</div>
+                <div style="font-size:13px;opacity:.7;">Your travel business, visualized</div>
+            </div>
         </div>
     </div>
 </section>
@@ -22,8 +26,8 @@
 <section class="section">
     <div class="container">
         <div class="stats">
-            <?php foreach ($trustStats as $s): ?>
-            <div class="stat">
+            <?php foreach ($trustStats as $i => $s): ?>
+            <div class="stat fade-in" style="animation-delay:<?= ($i * 0.1) ?>s">
                 <div class="stat__value"><?= esc($s['value']) ?></div>
                 <div class="stat__label"><?= esc($s['label']) ?><?php if (! empty($s['tbd'])): ?><span class="tbd">TBD</span><?php endif; ?></div>
             </div>
@@ -40,8 +44,8 @@
             <p>Sound familiar? Here's what CRM Software Nepal replaces.</p>
         </div>
         <div class="problems">
-            <?php foreach ($painPoints as $p): ?>
-            <div class="problem">
+            <?php foreach ($painPoints as $i => $p): ?>
+            <div class="problem fade-in" style="animation-delay:<?= ($i * 0.05) ?>s">
                 <span class="problem__x">&times;</span>
                 <span><?= esc($p) ?></span>
             </div>
@@ -58,8 +62,8 @@
             <p>Purpose-built modules for every step of the customer journey.</p>
         </div>
         <div class="features-grid">
-            <?php foreach ($featureGroups as $fg): ?>
-            <div class="feature-card">
+            <?php foreach ($featureGroups as $i => $fg): ?>
+            <div class="feature-card fade-in" style="animation-delay:<?= ($i * 0.08) ?>s">
                 <div class="feature-card__icon"><?= strtoupper(substr($fg['title'], 0, 1)) ?></div>
                 <h3><?= esc($fg['title']) ?></h3>
                 <ul>
@@ -78,10 +82,11 @@
     <div class="container">
         <div class="section__head">
             <h2>How It Works</h2>
+            <p>From first inquiry to repeat customer — in five simple steps.</p>
         </div>
         <div class="steps">
-            <?php foreach ($howItWorks as $s): ?>
-            <div class="step">
+            <?php foreach ($howItWorks as $i => $s): ?>
+            <div class="step fade-in" style="animation-delay:<?= ($i * 0.1) ?>s">
                 <div class="step__num"><?= $s['step'] ?></div>
                 <h4><?= esc($s['title']) ?></h4>
                 <p><?= esc($s['desc']) ?></p>
@@ -99,8 +104,8 @@
             <p>Placeholder tiles below — replace each with an actual product screenshot before launch.</p>
         </div>
         <div class="screens-grid">
-            <?php foreach ($screenshots as $s): ?>
-            <div class="screen-card"><?= esc($s) ?></div>
+            <?php foreach ($screenshots as $i => $s): ?>
+            <div class="screen-card fade-in" style="animation-delay:<?= ($i * 0.06) ?>s"><?= esc($s) ?></div>
             <?php endforeach; ?>
         </div>
     </div>

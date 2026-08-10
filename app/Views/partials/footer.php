@@ -2,8 +2,10 @@
     <div class="container">
         <div class="footer-grid">
             <div class="footer-col">
-                <h4 style="color:#fff;font-family:var(--font-heading);font-size:18px;">CRM<span style="color:var(--color-accent)">Nepal</span></h4>
-                <p style="font-size:14px;color:#BFDAD5;margin-top:10px;max-width:240px;">
+                <a href="<?= site_url('/') ?>" class="footer-logo">
+                    <img src="<?= base_url('assets/images/logo.svg') ?>" alt="CRM Software Nepal" height="40" style="filter:brightness(1.2);">
+                </a>
+                <p style="font-size:14px;color:#A8C4E0;margin-top:12px;max-width:260px;">
                     Purpose-built CRM for travel agencies, trekking agencies, tour operators and DMCs in Nepal.
                 </p>
             </div>
@@ -27,8 +29,7 @@
             </div>
             <div class="footer-col">
                 <h4>Contact</h4>
-                <a href="#">Kathmandu, Nepal — TBD</a>
-                <a href="tel:+977">+977-XX-XXXXXXX — TBD</a>
+                <a href="#">Kathmandu, Nepal</a>
                 <a href="mailto:info@crmsoftwarenepal.com">info@crmsoftwarenepal.com</a>
             </div>
         </div>
