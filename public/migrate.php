@@ -22,14 +22,22 @@ $pass = getenv('database.default.password');
 
 echo "Host: $host\nPort: $port\nDB: $db\nUser: $user\n";
 
-$connStr = "host=$host port=$port dbname=$db user=$user password=$pass sslmode=require";
-echo "Connecting with pg_connect...\n";
+$connStr = "host=$host port=$port dbname=$db user=$user password=$pass";
+echo "Connecting...\n";
 
 $conn = @pg_connect($connStr);
 if (!$conn) {
-    echo "pg_connect failed. Trying pgsql:// DSN...\n";
-    $dsn = "pgsql://$user:$pass@$host:$port/$db?sslmode=require";
-    $conn = @pg_connect($dsn);
+    echo "Failed. Trying with sslmode=prefer...\n";
+    $conn = @pg_connect("$connStr sslmode=prefer");
+}
+if (!$conn) {
+    echo "Failed. Trying with sslmode=require...\n";
+    $conn = @pg_connect("$connStr sslmode=require");
+}
+if (!$conn) {
+    echo "Failed. Trying external host...\n";
+    $extHost = 'dpg-d9sa7o142hec73bv25b0-a.oregon-postgres.render.com';
+    $conn = @pg_connect("host=$extHost port=$port dbname=$db user=$user password=$pass sslmode=require");
 }
 
 if ($conn) {
@@ -49,5 +57,6 @@ if ($conn) {
     }
     pg_close($conn);
 } else {
-    echo "Connection failed: " . pg_last_error() . "\n";
+    echo "All connection attempts failed.\n";
+    echo "pg_last_error: " . pg_last_error() . "\n";
 }

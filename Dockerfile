@@ -22,7 +22,7 @@ RUN mkdir -p /var/www/html/writable/{cache,logs,session,uploads} \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 777 /var/www/html/writable
 
-ENV PGSSLMODE=require
+ENV PGSSLMODE=prefer
 
 EXPOSE 80
 
