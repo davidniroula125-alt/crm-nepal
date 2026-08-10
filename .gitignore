@@ -4,6 +4,9 @@
 /writable/logs/*
 /writable/session/*
 /writable/uploads/*
-!/writable/cache/index.html
+!/writable/cache/.gitkeep
+!/writable/logs/.gitkeep
+!/writable/session/.gitkeep
+!/writable/uploads/.gitkeep
 node_modules/
 .DS_Store
