@@ -47,14 +47,14 @@ abstract class BaseController extends PublicBase
         return session()->get('user_role') === 'support';
     }
 
-    protected function requireAdmin(): void
+    protected function requireAdmin()
     {
         if (! $this->isAdmin()) {
             return redirect()->back()->with('error', 'You do not have permission to access this page.');
         }
     }
 
-    protected function requireAdminOrEditor(): void
+    protected function requireAdminOrEditor()
     {
         if (! $this->isAdmin() && ! $this->isEditor()) {
             return redirect()->back()->with('error', 'You do not have permission to access this page.');
