@@ -35,7 +35,7 @@
     </table>
 </div>
 
-<?php if (isset($pager) && $pager->getTotalPages() > 1): ?>
+<?php if (isset($pager) && $pager->getPageCount() > 1): ?>
 <div class="admin-pagination">
     <?= $pager->links() ?>
 </div>
