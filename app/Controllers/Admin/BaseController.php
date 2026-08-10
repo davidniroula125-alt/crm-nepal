@@ -6,6 +6,18 @@ use App\Controllers\BaseController as PublicBase;
 
 abstract class BaseController extends PublicBase
 {
+    public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
+    {
+        try {
+            parent::initController($request, $response, $logger);
+        } catch (\Throwable $e) {
+            $response->setStatusCode(500);
+            $response->setBody('BaseController initController error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+            $response->setHeader('Content-Type', 'text/plain');
+            throw $e;
+        }
+    }
+
     protected function currentUser(): ?object
     {
         $userId = session()->get('user_id');

@@ -2,17 +2,18 @@
 
 namespace App\Controllers\Admin;
 
-use App\Models\UserModel;
-use App\Models\ActivityLogModel;
-
 class Auth extends BaseController
 {
     public function login()
     {
-        if (session()->get('user_id')) {
-            return redirect()->to('/admin/dashboard');
+        try {
+            if (session()->get('user_id')) {
+                return redirect()->to('/admin/dashboard');
+            }
+            return view('admin/auth/login');
+        } catch (\Throwable $e) {
+            return $this->response->setStatusCode(500)->setBody('AUTH ERROR: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine())->setHeader('Content-Type', 'text/plain');
         }
-        return view('admin/auth/login');
     }
 
     public function attemptLogin()
@@ -28,7 +29,7 @@ class Auth extends BaseController
 
         $email    = $this->request->getPost('email');
         $password = $this->request->getPost('password');
-        $userModel = new UserModel();
+        $userModel = new \App\Models\UserModel();
         $user = $userModel->where('email', $email)->first();
 
         if (! $user || ! password_verify($password, $user->password_hash)) {
@@ -51,7 +52,7 @@ class Auth extends BaseController
             'last_login_ip' => $this->request->getIPAddress(),
         ]);
 
-        (new ActivityLogModel())->log($user->id, 'Logged in');
+        (new \App\Models\ActivityLogModel())->log($user->id, 'Logged in');
 
         if ($user->role === 'admin' || $user->role === 'editor') {
             return redirect()->to('/admin/dashboard');
@@ -63,7 +64,7 @@ class Auth extends BaseController
     {
         $userId = session()->get('user_id');
         if ($userId) {
-            (new ActivityLogModel())->log($userId, 'Logged out');
+            (new \App\Models\ActivityLogModel())->log($userId, 'Logged out');
         }
         session()->destroy();
         return redirect()->to('/');
