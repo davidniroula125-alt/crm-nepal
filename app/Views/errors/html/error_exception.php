@@ -2,41 +2,56 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Error</title>
+    <title>Exception Details</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 2rem; background: #f5f5f5; color: #333; }
-        .error-container { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 2rem; }
-        h1 { color: #e74c3c; border-bottom: 2px solid #eee; padding-bottom: 1rem; }
-        .error-info { margin: 1rem 0; }
-        .error-info strong { display: inline-block; width: 100px; color: #555; }
-        .trace { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem; line-height: 1.6; }
-        a { display: inline-block; margin-top: 1rem; padding: 0.75rem 2rem; background: #3498db; color: #fff; text-decoration: none; border-radius: 4px; }
-        a:hover { background: #2980b9; }
+        body { font-family: monospace; margin: 0; padding: 2rem; background: #1e1e1e; color: #d4d4d4; }
+        h1 { color: #e74c3c; }
+        h2 { color: #f39c12; }
+        pre { background: #2d2d2d; padding: 1rem; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; border: 1px solid #444; }
+        .label { color: #9cdcfe; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="error-container">
-        <h1><?= esc($heading ?? 'Error') ?></h1>
-        <div class="error-info">
-            <p><?= esc($message ?? 'An unexpected error occurred.') ?></p>
-        </div>
+    <h1>Error Details</h1>
 
-        <?php if (defined('CI_DEBUG') && CI_DEBUG): ?>
-            <?php if (!empty($file)): ?>
-                <div class="error-info">
-                    <strong>File:</strong> <?= esc($file) ?>
-                    <?php if (!empty($line)): ?>
-                        <strong>Line:</strong> <?= esc($line) ?>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
+    <?php
+    // Try to get exception from different possible variable names
+    $ex = null;
+    if (isset($exception) && $exception instanceof \Throwable) { $ex = $exception; }
+    elseif (isset($e) && $e instanceof \Throwable) { $ex = $e; }
+    elseif (isset($exc) && $exc instanceof \Throwable) { $ex = $exc; }
 
-            <?php if (!empty($trace)): ?>
-                <div class="trace"><pre><?= esc($trace) ?></pre></div>
-            <?php endif; ?>
-        <?php endif; ?>
+    if ($ex !== null):
+    ?>
+        <p><span class="label">Exception Class:</span> <?= get_class($ex) ?></p>
+        <p><span class="label">Message:</span> <?= htmlspecialchars($ex->getMessage()) ?></p>
+        <p><span class="label">File:</span> <?= htmlspecialchars($ex->getFile()) ?></p>
+        <p><span class="label">Line:</span> <?= $ex->getLine() ?></p>
+        <p><span class="label">Code:</span> <?= $ex->getCode() ?></p>
+        <h2>Stack Trace</h2>
+        <pre><?= htmlspecialchars($ex->getTraceAsString()) ?></pre>
+    <?php
+    else:
+    ?>
+        <p>No exception object found in view variables.</p>
+    <?php endif; ?>
 
-        <a href="/">Go Home</a>
-    </div>
+    <h2>Debug Info</h2>
+    <pre>
+PHP: <?= phpversion() ?>
+CI_ENVIRONMENT: <?= getenv('CI_ENVIRONMENT') ?: 'not set' ?>
+CI_DEBUG: <?= defined('CI_DEBUG') ? (CI_DEBUG ? 'true' : 'false') : 'NOT DEFINED' ?>
+REQUEST_URI: <?= $_SERVER['REQUEST_URI'] ?? 'N/A' ?>
+HTTP_ACCEPT: <?= $_SERVER['HTTP_ACCEPT'] ?? 'N/A' ?>
+</pre>
+
+    <h2>All Defined Variables</h2>
+    <pre><?php
+    $vars = get_defined_vars();
+    unset($vars['GLOBALS']);
+    foreach ($vars as $k => $v) {
+        echo htmlspecialchars($k) . ' = ' . (is_object($v) ? get_class($v) : var_export($v, true)) . "\n";
+    }
+    ?></pre>
 </body>
 </html>
