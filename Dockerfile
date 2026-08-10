@@ -22,6 +22,8 @@ RUN mkdir -p /var/www/html/writable/{cache,logs,session,uploads} \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 777 /var/www/html/writable
 
+ENV PGSSLMODE=require
+
 EXPOSE 80
 
 CMD ["apache2-foreground"]
