@@ -8,10 +8,6 @@ use CodeIgniter\Router\RouteCollection;
 
 // ── Public Frontend ──
 $routes->get('migrate', 'Migrate::index');
-$routes->get('debug', 'Debug::index');
-$routes->get('admin-test', 'AdminTest::index');
-$routes->get('adm', 'Admin\Auth::login');
-$routes->post('adm', 'Admin\Auth::attemptLogin');
 $routes->get('/', 'Home::index');
 $routes->get('about-us', 'Pages::about');
 $routes->get('features', 'Pages::features');
