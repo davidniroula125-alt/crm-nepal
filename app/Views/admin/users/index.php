@@ -37,10 +37,14 @@
                             $roleBadge = 'secondary';
                             if ($user->role === 'admin') {
                                 $roleBadge = 'danger';
+                            } elseif ($user->role === 'editor') {
+                                $roleBadge = 'info';
                             } elseif ($user->role === 'sales') {
                                 $roleBadge = 'primary';
                             } elseif ($user->role === 'support') {
                                 $roleBadge = 'warning';
+                            } elseif ($user->role === 'user') {
+                                $roleBadge = 'secondary';
                             }
                             ?>
                             <span class="badge badge-<?= $roleBadge ?>">

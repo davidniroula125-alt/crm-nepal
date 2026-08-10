@@ -26,6 +26,12 @@
                 <h4>Resources</h4>
                 <a href="<?= site_url('blog') ?>">Blog</a>
                 <a href="<?= site_url('faq') ?>">FAQ</a>
+                <?php if (session()->get('user_id')): ?>
+                    <a href="<?= site_url('user/dashboard') ?>">My Dashboard</a>
+                <?php else: ?>
+                    <a href="<?= site_url('user/login') ?>">Log In</a>
+                    <a href="<?= site_url('user/signup') ?>">Sign Up</a>
+                <?php endif; ?>
             </div>
             <div class="footer-col">
                 <h4>Contact</h4>

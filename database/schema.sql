@@ -242,3 +242,15 @@ INSERT INTO pricing_plans (name, billing_cycle, price, description, features, so
 ('Starter', 'Annual', 25000.00, 'For small agencies getting started', 'Up to 5 users|Lead Management|Customer Database|Basic Reporting|Email Support', 4),
 ('Professional', 'Annual', 50000.00, 'For growing travel businesses', 'Up to 15 users|Everything in Starter|Sales Pipeline|Payment Tracking|Follow-up Reminders|Priority Support', 5),
 ('Enterprise', 'Annual', 100000.00, 'For large operations', 'Unlimited users|Everything in Professional|Advanced Reports|API Access|Custom Integrations|Dedicated Support', 6);
+
+-- Complaints table
+CREATE TABLE IF NOT EXISTS complaints (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    subject VARCHAR(200) NOT NULL,
+    message TEXT NOT NULL,
+    admin_reply TEXT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'Open' CHECK (status IN ('Open','In Progress','Replied','Closed')),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL
+);

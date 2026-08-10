@@ -2,25 +2,28 @@
 
 namespace App\Controllers\Admin;
 
-use App\Controllers\BaseController as AppBaseController;
+use CodeIgniter\Controller;
+use CodeIgniter\HTTP\CLIRequest;
+use CodeIgniter\HTTP\IncomingRequest;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
-/**
- * Base controller for all admin panel controllers.
- * Provides common helpers, session utilities, and shared data.
- */
-abstract class BaseController extends AppBaseController
+abstract class BaseController extends Controller
 {
-    /**
-     * Get the currently logged-in admin user from session.
-     */
+    protected $helpers = ['url', 'form'];
+
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
+    {
+        parent::initController($request, $response, $logger);
+    }
+
     protected function currentUser(): ?object
     {
         $userId = session()->get('user_id');
-
         if (! $userId) {
             return null;
         }
-
         return (object) [
             'id'    => $userId,
             'name'  => session()->get('user_name'),
@@ -29,33 +32,21 @@ abstract class BaseController extends AppBaseController
         ];
     }
 
-    /**
-     * Check if the current user is an admin.
-     */
     protected function isAdmin(): bool
     {
         return session()->get('user_role') === 'admin';
     }
 
-    /**
-     * Check if the current user is a sales representative.
-     */
-    protected function isSales(): bool
+    protected function isEditor(): bool
     {
-        return session()->get('user_role') === 'sales';
+        return session()->get('user_role') === 'editor';
     }
 
-    /**
-     * Check if the current user is a support agent.
-     */
     protected function isSupport(): bool
     {
         return session()->get('user_role') === 'support';
     }
 
-    /**
-     * Require the current user to be an admin. Redirect otherwise.
-     */
     protected function requireAdmin(): void
     {
         if (! $this->isAdmin()) {
@@ -63,12 +54,9 @@ abstract class BaseController extends AppBaseController
         }
     }
 
-    /**
-     * Require the current user to be admin or sales. Redirect otherwise.
-     */
-    protected function requireSalesOrAdmin(): void
+    protected function requireAdminOrEditor(): void
     {
-        if (! $this->isAdmin() && ! $this->isSales()) {
+        if (! $this->isAdmin() && ! $this->isEditor()) {
             return redirect()->back()->with('error', 'You do not have permission to access this page.');
         }
     }

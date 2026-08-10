@@ -55,8 +55,10 @@
             <label for="role">Role <span class="required">*</span></label>
             <select id="role" name="role" class="form-control" required>
                 <option value="admin" <?= old('role') === 'admin' ? 'selected' : '' ?>>Admin</option>
+                <option value="editor" <?= old('role') === 'editor' ? 'selected' : '' ?>>Editor (CMS Content)</option>
                 <option value="sales" <?= old('role') === 'sales' ? 'selected' : '' ?>>Sales</option>
                 <option value="support" <?= old('role') === 'support' ? 'selected' : '' ?>>Support</option>
+                <option value="user" <?= old('role') === 'user' ? 'selected' : '' ?>>User (Complaints)</option>
             </select>
         </div>
 

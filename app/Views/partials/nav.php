@@ -11,7 +11,12 @@
             <a href="<?= site_url('pricing') ?>">Pricing</a>
             <a href="<?= site_url('blog') ?>">Blog</a>
             <a href="<?= site_url('contact-us') ?>">Contact Us</a>
-            <a href="<?= site_url('request-a-demo') ?>" class="btn btn-primary">Request a Demo</a>
+            <?php if (session()->get('user_id')): ?>
+                <a href="<?= site_url('user/dashboard') ?>" class="btn btn-primary">My Dashboard</a>
+            <?php else: ?>
+                <a href="<?= site_url('user/login') ?>" style="font-weight:600;">Log In</a>
+                <a href="<?= site_url('user/signup') ?>" class="btn btn-primary">Sign Up</a>
+            <?php endif; ?>
         </nav>
         <button class="navbar__toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
     </div>

@@ -57,6 +57,12 @@
         <a href="<?= base_url('/admin/users') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'users' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#9823;</span> Users
         </a>
+        <a href="<?= base_url('/admin/complaints') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'complaints' ? 'active' : '' ?>">
+            <span class="sidebar-icon">&#9888;</span> Complaints
+        </a>
+        <a href="<?= base_url('/admin/logs') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'logs' ? 'active' : '' ?>">
+            <span class="sidebar-icon">&#128196;</span> Activity Logs
+        </a>
         <a href="<?= base_url('/admin/settings') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'settings' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#9881;</span> Settings
         </a>

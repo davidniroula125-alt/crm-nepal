@@ -47,7 +47,7 @@ class Users extends BaseController
             'email'             => 'required|valid_email|max_length[150]|is_unique[users.email]',
             'password'          => 'required|min_length[8]',
             'password_confirm'  => 'required|matches[password]',
-            'role'              => 'required|in_list[admin,sales,support]',
+            'role'              => 'required|in_list[admin,editor,sales,support,user]',
             'is_active'         => 'required|in_list[0,1]',
         ];
 
@@ -117,7 +117,7 @@ class Users extends BaseController
         $rules = [
             'name'     => 'required|max_length[150]',
             'email'    => "required|valid_email|max_length[150]|is_unique[users.email,id,{$id}]",
-            'role'     => 'required|in_list[admin,sales,support]',
+            'role'     => 'required|in_list[admin,editor,sales,support,user]',
             'is_active'=> 'required|in_list[0,1]',
         ];
 
