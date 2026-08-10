@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 
 // ── Public Frontend ──
 $routes->get('migrate', 'Migrate::index');
+$routes->get('debug', 'Debug::index');
 $routes->get('/', 'Home::index');
 $routes->get('about-us', 'Pages::about');
 $routes->get('features', 'Pages::features');

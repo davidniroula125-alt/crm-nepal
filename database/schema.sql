@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(150) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    role VARCHAR(20) NOT NULL DEFAULT 'sales' CHECK (role IN ('admin','sales','support')),
+    role VARCHAR(20) NOT NULL DEFAULT 'sales' CHECK (role IN ('admin','editor','sales','support','user')),
     is_active SMALLINT NOT NULL DEFAULT 1,
     last_login_at TIMESTAMP NULL,
     last_login_ip VARCHAR(45) NULL,

@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\CLI\CLI;
-
 class Migrate extends BaseController
 {
     public function index()
