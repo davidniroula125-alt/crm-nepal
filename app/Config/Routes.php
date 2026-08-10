@@ -162,5 +162,6 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
         // Settings
         $routes->get('settings', 'Settings::index');
         $routes->post('settings/update', 'Settings::update');
+        $routes->get('test', 'Test::index');
     });
 });
