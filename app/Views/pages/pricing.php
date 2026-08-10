@@ -3,8 +3,8 @@
 
 <section class="hero" style="text-align:center;">
     <div class="container">
-        <h1>Simple, Transparent Pricing</h1>
-        <p style="max-width:560px;margin:0 auto 28px;">No hidden fees. No long-term contracts. Choose the plan that fits your agency.</p>
+        <h1><?= esc($pageContent['hero']['headline'] ?? 'Simple, Transparent Pricing') ?></h1>
+        <p style="max-width:560px;margin:0 auto 28px;"><?= esc($pageContent['hero']['subtext'] ?? 'No hidden fees. No long-term contracts.') ?></p>
         <div class="pricing-toggle" style="display:inline-flex;align-items:center;gap:12px;margin-bottom:10px;">
             <span id="label-monthly" style="font-weight:600;color:var(--color-primary);">Monthly</span>
             <label class="toggle" style="position:relative;width:48px;height:26px;cursor:pointer;">
@@ -34,20 +34,20 @@
                     <div style="background:var(--color-primary);color:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:4px 12px;border-radius:4px;display:inline-block;margin-bottom:12px;">Most Popular</div>
                 <?php endif; ?>
                 <h3 style="font-size:22px;margin-bottom:4px;"><?= esc($plan->name) ?></h3>
-                <p style="color:var(--color-text-muted);font-size:14px;margin-bottom:16px;"><?= esc($plan->description) ?></p>
+                <p style="color:var(--color-text-muted);font-size:14px;margin-bottom:16px;"><?= esc($plan->description ?? '') ?></p>
                 <div style="margin-bottom:20px;">
                     <span style="font-size:36px;font-weight:700;color:var(--color-primary);">NPR <?= number_format($plan->price) ?></span>
                     <span style="font-size:14px;color:var(--color-text-muted);">/<?= esc(strtolower($plan->billing_cycle)) ?></span>
                 </div>
+                <?php if (!empty($plan->features)): ?>
                 <ul style="text-align:left;margin-bottom:24px;">
-                    <li style="padding:6px 0;font-size:14px;color:var(--color-text-muted);">✓ Full CRM access</li>
-                    <li style="padding:6px 0;font-size:14px;color:var(--color-text-muted);">✓ Lead & customer management</li>
-                    <li style="padding:6px 0;font-size:14px;color:var(--color-text-muted);">✓ Sales pipeline</li>
-                    <li style="padding:6px 0;font-size:14px;color:var(--color-text-muted);">✓ Tour & booking management</li>
-                    <li style="padding:6px 0;font-size:14px;color:var(--color-text-muted);">✓ Payment tracking</li>
-                    <li style="padding:6px 0;font-size:14px;color:var(--color-text-muted);">✓ Reports & analytics</li>
-                    <li style="padding:6px 0;font-size:14px;color:var(--color-text-muted);">✓ Email support</li>
+                    <?php foreach (explode("\n", $plan->features) as $feature): ?>
+                        <?php if (trim($feature)): ?>
+                        <li style="padding:6px 0;font-size:14px;color:var(--color-text-muted);">✓ <?= esc(trim($feature)) ?></li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </ul>
+                <?php endif; ?>
                 <a href="<?= site_url('request-a-demo') ?>" class="btn <?= $i === 1 ? 'btn-primary' : 'btn-outline' ?>" style="width:100%;">Get Started</a>
             </div>
             <?php endforeach; ?>

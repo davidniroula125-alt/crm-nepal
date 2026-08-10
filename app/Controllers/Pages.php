@@ -8,26 +8,36 @@ use App\Models\DemoRequestModel;
 use App\Models\FaqModel;
 use App\Models\LeadModel;
 use App\Models\PricingPlanModel;
+use App\Models\SiteContentModel;
 
 class Pages extends BaseController
 {
+    protected function pageData(string $slug, array $extra = []): array
+    {
+        $siteModel = model(SiteContentModel::class);
+        $content = $siteModel->getPageContent($slug);
+        return $this->siteData(array_merge([
+            'pageContent' => $content,
+        ], $extra));
+    }
+
     public function about(): string
     {
-        return view('pages/about', $this->siteData([
+        return view('pages/about', $this->pageData('about', [
             'metaTitle' => 'About Us | CRM Software Nepal',
         ]));
     }
 
     public function features(): string
     {
-        return view('pages/features', $this->siteData([
+        return view('pages/features', $this->pageData('features', [
             'metaTitle' => 'Features | CRM Software Nepal',
         ]));
     }
 
     public function solutions(): string
     {
-        return view('pages/solutions', $this->siteData([
+        return view('pages/solutions', $this->pageData('solutions', [
             'metaTitle' => 'Solutions | CRM Software Nepal',
         ]));
     }
@@ -37,7 +47,7 @@ class Pages extends BaseController
         $model = model(PricingPlanModel::class);
         $plans = $model->getActivePlans();
 
-        return view('pages/pricing', $this->siteData([
+        return view('pages/pricing', $this->pageData('pricing', [
             'metaTitle' => 'Pricing | CRM Software Nepal',
             'plans'     => $plans,
         ]));
@@ -57,7 +67,7 @@ class Pages extends BaseController
             }
         }
 
-        return view('pages/faq', $this->siteData([
+        return view('pages/faq', $this->pageData('faq', [
             'metaTitle'  => 'FAQ | CRM Software Nepal',
             'grouped'    => $grouped,
             'categories' => $categories,
@@ -66,7 +76,7 @@ class Pages extends BaseController
 
     public function contact(): string
     {
-        return view('pages/contact', $this->siteData([
+        return view('pages/contact', $this->pageData('contact', [
             'metaTitle' => 'Contact Us | CRM Software Nepal',
         ]));
     }
@@ -108,7 +118,7 @@ class Pages extends BaseController
 
     public function demo(): string
     {
-        return view('pages/demo', $this->siteData([
+        return view('pages/demo', $this->pageData('demo', [
             'metaTitle' => 'Request a Demo | CRM Software Nepal',
         ]));
     }
@@ -133,7 +143,6 @@ class Pages extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Auto-create lead first
         $leadModel  = model(LeadModel::class);
         $leadId = $leadModel->insert([
             'full_name'    => $this->request->getPost('full_name'),
@@ -147,7 +156,6 @@ class Pages extends BaseController
             'updated_at'   => date('Y-m-d H:i:s'),
         ]);
 
-        // Save demo request linked to the lead
         $demoModel = model(DemoRequestModel::class);
         $demoId = $demoModel->insert([
             'full_name'        => $this->request->getPost('full_name'),

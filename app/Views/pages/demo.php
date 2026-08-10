@@ -4,8 +4,8 @@
 <section class="section">
     <div class="container">
         <div class="section__head">
-            <h2>Request a Demo</h2>
-            <p>Tell us a bit about your agency and we'll set up a walkthrough.</p>
+            <h2><?= esc($pageContent['hero']['headline'] ?? 'Request a Demo') ?></h2>
+            <p><?= esc($pageContent['hero']['subtext'] ?? 'Tell us a bit about your agency and we\'ll set up a walkthrough.') ?></p>
         </div>
 
         <div class="form-card">

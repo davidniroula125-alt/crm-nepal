@@ -160,5 +160,9 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
         // Settings
         $routes->get('settings', 'Settings::index');
         $routes->post('settings/update', 'Settings::update');
+
+        // Site Content Management
+        $routes->get('site', 'Site::index');
+        $routes->post('site/update', 'Site::update');
     });
 });

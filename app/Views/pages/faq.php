@@ -3,8 +3,8 @@
 
 <section class="hero" style="text-align:center;">
     <div class="container">
-        <h1>Frequently Asked Questions</h1>
-        <p style="max-width:520px;margin:0 auto 28px;">Find answers to common questions about CRM Software Nepal. Can't find what you're looking for? Contact us.</p>
+        <h1><?= esc($pageContent['hero']['headline'] ?? 'Frequently Asked Questions') ?></h1>
+        <p style="max-width:520px;margin:0 auto 28px;"><?= esc($pageContent['hero']['subtext'] ?? 'Find answers to common questions.') ?></p>
         <div class="hero__ctas" style="justify-content:center;">
             <a href="<?= site_url('contact-us') ?>" class="btn btn-primary btn-lg">Contact Us</a>
         </div>
@@ -43,47 +43,7 @@
             <?php endforeach; ?>
         <?php else: ?>
             <div style="text-align:center;padding:40px 0;">
-                <p style="color:var(--color-text-muted);margin-bottom:24px;">Our FAQ section is being updated. Here are some common questions:</p>
-
-                <div class="faq-item" style="border:1px solid var(--color-border);border-radius:var(--radius-md);margin-bottom:12px;overflow:hidden;">
-                    <button class="faq-question" style="width:100%;text-align:left;padding:16px 20px;background:#fff;border:none;font-size:15px;font-weight:600;color:var(--color-primary-dark);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
-                        <span>What is CRM Software Nepal?</span>
-                        <span style="font-size:20px;color:var(--color-text-muted);transition:.2s;flex-shrink:0;margin-left:12px;">+</span>
-                    </button>
-                    <div class="faq-answer" style="display:none;padding:0 20px 16px;font-size:14px;color:var(--color-text-muted);line-height:1.7;">
-                        CRM Software Nepal is a purpose-built customer relationship management platform designed specifically for travel, trekking and tour operator businesses in Nepal. It helps you manage leads, customers, bookings, payments and team performance in one centralized system.
-                    </div>
-                </div>
-
-                <div class="faq-item" style="border:1px solid var(--color-border);border-radius:var(--radius-md);margin-bottom:12px;overflow:hidden;">
-                    <button class="faq-question" style="width:100%;text-align:left;padding:16px 20px;background:#fff;border:none;font-size:15px;font-weight:600;color:var(--color-primary-dark);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
-                        <span>Do I need technical knowledge to use it?</span>
-                        <span style="font-size:20px;color:var(--color-text-muted);transition:.2s;flex-shrink:0;margin-left:12px;">+</span>
-                    </button>
-                    <div class="faq-answer" style="display:none;padding:0 20px 16px;font-size:14px;color:var(--color-text-muted);line-height:1.7;">
-                        No. CRM Software Nepal is designed to be user-friendly. If you can use email and browse the web, you can use our CRM. We also provide free onboarding and training.
-                    </div>
-                </div>
-
-                <div class="faq-item" style="border:1px solid var(--color-border);border-radius:var(--radius-md);margin-bottom:12px;overflow:hidden;">
-                    <button class="faq-question" style="width:100%;text-align:left;padding:16px 20px;background:#fff;border:none;font-size:15px;font-weight:600;color:var(--color-primary-dark);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
-                        <span>Can I try before I buy?</span>
-                        <span style="font-size:20px;color:var(--color-text-muted);transition:.2s;flex-shrink:0;margin-left:12px;">+</span>
-                    </button>
-                    <div class="faq-answer" style="display:none;padding:0 20px 16px;font-size:14px;color:var(--color-text-muted);line-height:1.7;">
-                        Yes. We offer a 14-day free trial with full access to all features. No credit card required to start.
-                    </div>
-                </div>
-
-                <div class="faq-item" style="border:1px solid var(--color-border);border-radius:var(--radius-md);margin-bottom:12px;overflow:hidden;">
-                    <button class="faq-question" style="width:100%;text-align:left;padding:16px 20px;background:#fff;border:none;font-size:15px;font-weight:600;color:var(--color-primary-dark);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
-                        <span>Is my data secure?</span>
-                        <span style="font-size:20px;color:var(--color-text-muted);transition:.2s;flex-shrink:0;margin-left:12px;">+</span>
-                    </button>
-                    <div class="faq-answer" style="display:none;padding:0 20px 16px;font-size:14px;color:var(--color-text-muted);line-height:1.7;">
-                        Yes. We use industry-standard encryption, regular backups and secure hosting to protect your data. Your data is backed up daily and stored in secure, redundant servers.
-                    </div>
-                </div>
+                <p style="color:var(--color-text-muted);margin-bottom:24px;">FAQ content is being managed from the admin panel. Check back soon.</p>
             </div>
         <?php endif; ?>
     </div>

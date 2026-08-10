@@ -63,8 +63,14 @@
         <a href="<?= base_url('/admin/logs') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'logs' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#128196;</span> Activity Logs
         </a>
+        <a href="<?= base_url('/admin/site') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'site' ? 'active' : '' ?>">
+            <span class="sidebar-icon">&#127968;</span> Site Content
+        </a>
         <a href="<?= base_url('/admin/settings') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'settings' ? 'active' : '' ?>">
             <span class="sidebar-icon">&#9881;</span> Settings
+        </a>
+        <a href="<?= base_url('/admin/site') ?>" class="sidebar-link <?= (current_url(true)->getSegment(2) ?? '') === 'site' ? 'active' : '' ?>">
+            <span class="sidebar-icon">&#128196;</span> Site Content
         </a>
     </nav>
 

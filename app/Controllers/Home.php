@@ -6,16 +6,24 @@ class Home extends BaseController
 {
     public function index(): string
     {
+        $siteModel = model(\App\Models\SiteContentModel::class);
+        $content = $siteModel->getPageContent('home');
+
         $data = $this->siteData([
-            'metaTitle'       => 'CRM Software Nepal | Powerful CRM for Travel & Trekking Agencies',
+            'metaTitle'       => ($content['settings']['site_name'] ?? 'CRM Software Nepal') . ' | Powerful CRM for Travel & Trekking Agencies',
             'metaDescription' => 'CRM Software Nepal helps travel agencies, trekking agencies, tour operators and DMCs manage leads, customers, bookings, payments and follow-ups in one place.',
 
-            // TBD: replace with real figures before launch
+            'hero' => $content['hero'] ?? [],
+            'problems' => $content['problems'] ?? [],
+            'features' => $content['features'] ?? [],
+            'howItWorks' => $content['how_it_works'] ?? [],
+            'ctaBand' => $content['cta_band'] ?? [],
+
             'trustStats' => [
-                ['label' => 'Agencies Onboarded', 'value' => '50+', 'tbd' => true],
-                ['label' => 'Years of Experience', 'value' => '5+', 'tbd' => true],
-                ['label' => 'Leads Managed', 'value' => '10,000+', 'tbd' => true],
-                ['label' => 'Uptime', 'value' => '99.9%', 'tbd' => true],
+                ['label' => 'Agencies Onboarded', 'value' => '50+'],
+                ['label' => 'Years of Experience', 'value' => '5+'],
+                ['label' => 'Leads Managed', 'value' => '10,000+'],
+                ['label' => 'Uptime', 'value' => '99.9%'],
             ],
 
             'painPoints' => [
@@ -69,7 +77,7 @@ class Home extends BaseController
                 ],
             ],
 
-            'howItWorks' => [
+            'howItWorksSteps' => [
                 ['step' => 1, 'title' => 'Capture Inquiry', 'desc' => 'Every inquiry — website, phone, email, or social — lands in one inbox.'],
                 ['step' => 2, 'title' => 'Assign Rep', 'desc' => 'Leads route automatically to the right salesperson.'],
                 ['step' => 3, 'title' => 'Follow Up', 'desc' => 'Scheduled reminders keep every lead warm.'],
@@ -77,7 +85,6 @@ class Home extends BaseController
                 ['step' => 5, 'title' => 'Manage Relationship', 'desc' => 'Bookings, payments and history stay in one place going forward.'],
             ],
 
-            // TBD: replace placeholders with real product screenshots
             'screenshots' => [
                 'Dashboard Overview', 'Lead Management', 'Customer Profile',
                 'Sales Pipeline', 'Follow-up Calendar', 'Reports', 'Payments', 'User Management',

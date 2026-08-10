@@ -9,18 +9,10 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Shared controller for all public-site controllers (Home, Pages, Blog).
- * Admin controllers get their own BaseController under App\Controllers\Admin
- * once Part 2 is built.
- */
 abstract class BaseController extends Controller
 {
     protected $helpers = ['url', 'form', 'text'];
 
-    /**
-     * @var RequestInterface|CLIRequest|IncomingRequest
-     */
     protected $request;
 
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
@@ -29,14 +21,22 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Site-wide data available to every public view (nav, footer, theme).
-     * Real content (testimonials, FAQs, blog categories) will be pulled
-     * from the CMS models once the admin/content layer is built.
+     * Site-wide data available to every public view.
+     * Loads site settings from database.
      */
     protected function siteData(array $extra = []): array
     {
+        $siteModel = model(\App\Models\SiteContentModel::class);
+        $settings = $siteModel->getPageContent('settings');
+
         return array_merge([
-            'siteName'   => 'CRM Software Nepal',
+            'siteName'   => $settings['general']['site_name'] ?? 'CRM Software Nepal',
+            'siteTagline'=> $settings['general']['site_tagline'] ?? '',
+            'siteEmail'  => $settings['general']['site_email'] ?? 'info@crmsoftwarenepal.com',
+            'sitePhone'  => $settings['general']['site_phone'] ?? '',
+            'siteAddress'=> $settings['general']['site_address'] ?? 'Kathmandu, Nepal',
+            'footerDesc' => $settings['footer']['company_description'] ?? '',
+            'copyright'  => $settings['footer']['copyright'] ?? 'CRM Software Nepal. All rights reserved.',
             'currentUrl' => current_url(),
         ], $extra);
     }
