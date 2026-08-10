@@ -12,7 +12,11 @@
             <a href="<?= site_url('blog') ?>">Blog</a>
             <a href="<?= site_url('contact-us') ?>">Contact Us</a>
             <?php if (session()->get('user_id')): ?>
-                <a href="<?= site_url('user/dashboard') ?>" class="btn btn-primary">My Dashboard</a>
+                <?php if (in_array(session()->get('user_role'), ['admin', 'editor'])): ?>
+                    <a href="<?= site_url('admin/dashboard') ?>" class="btn btn-primary">Admin Dashboard</a>
+                <?php else: ?>
+                    <a href="<?= site_url('user/dashboard') ?>" class="btn btn-primary">My Dashboard</a>
+                <?php endif; ?>
             <?php else: ?>
                 <a href="<?= site_url('user/login') ?>" style="font-weight:600;">Log In</a>
                 <a href="<?= site_url('user/signup') ?>" class="btn btn-primary">Sign Up</a>

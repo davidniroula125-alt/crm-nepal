@@ -27,7 +27,11 @@
                 <a href="<?= site_url('blog') ?>">Blog</a>
                 <a href="<?= site_url('faq') ?>">FAQ</a>
                 <?php if (session()->get('user_id')): ?>
-                    <a href="<?= site_url('user/dashboard') ?>">My Dashboard</a>
+                    <?php if (in_array(session()->get('user_role'), ['admin', 'editor'])): ?>
+                        <a href="<?= site_url('admin/dashboard') ?>">Admin Dashboard</a>
+                    <?php else: ?>
+                        <a href="<?= site_url('user/dashboard') ?>">My Dashboard</a>
+                    <?php endif; ?>
                 <?php else: ?>
                     <a href="<?= site_url('user/login') ?>">Log In</a>
                     <a href="<?= site_url('user/signup') ?>">Sign Up</a>
