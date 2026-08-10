@@ -13,4 +13,16 @@ class Paths
     public string $writableDirectory = __DIR__ . '/../../writable';
     public string $testsDirectory = __DIR__ . '/../../tests';
     public string $viewDirectory = __DIR__ . '/../Views';
+
+    /**
+     * ---------------------------------------------------------------
+     * ENVIRONMENT DIRECTORY NAME
+     * ---------------------------------------------------------------
+     *
+     * This variable must contain the name of the directory where
+     * the .env file is located.
+     * Please consider security implications when changing this
+     * value - the directory should not be publicly accessible.
+     */
+    public string $envDirectory = __DIR__ . '/../../';
 }
