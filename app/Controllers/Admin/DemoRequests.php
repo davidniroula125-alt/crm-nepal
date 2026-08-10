@@ -17,17 +17,17 @@ class DemoRequests extends BaseController
     {
         $this->requireAdmin();
 
-        $builder = $this->model->builder();
-        $builder->orderBy('created_at', 'DESC');
-
         $status = $this->request->getGet('status');
+
+        $builder = $this->model->orderBy('created_at', 'DESC');
+
         if ($status !== null && $status !== '') {
-            $builder->where('status', $status);
+            $builder = $builder->where('status', $status);
         }
 
         $data['demoRequests'] = $builder->paginate(20);
         $data['pager']        = $this->model->pager;
-        $data['total']        = $this->model->countAll();
+        $data['total']        = $this->model->countAllResults();
         $data['currentStatus'] = $status ?? '';
 
         return view('admin/demo_requests/index', $data);

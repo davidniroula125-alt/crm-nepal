@@ -30,6 +30,7 @@ class Leads extends BaseController
             'status'      => $this->request->getVar('status') ?? '',
             'source'      => $this->request->getVar('source') ?? '',
             'assigned_to' => $this->request->getVar('assigned_to') ?? '',
+            'page'        => $this->request->getVar('page') ?? 1,
         ];
 
         $data = $this->leadModel->getLeadsFiltered($filters, 20);

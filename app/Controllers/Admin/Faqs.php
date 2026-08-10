@@ -17,16 +17,15 @@ class Faqs extends BaseController
     {
         $category = $this->request->getGet('category');
 
-        $builder = $this->model->builder();
-        $builder->orderBy('sort_order', 'ASC')->orderBy('id', 'DESC');
+        $builder = $this->model->orderBy('sort_order', 'ASC')->orderBy('id', 'DESC');
 
         if ($category !== null && $category !== '') {
-            $builder->where('category', $category);
+            $builder = $builder->where('category', $category);
         }
 
         $data['faqs']            = $builder->paginate(20);
         $data['pager']           = $this->model->pager;
-        $data['total']           = $this->model->countAll();
+        $data['total']           = $this->model->countAllResults();
         $data['currentCategory'] = $category ?? '';
 
         return view('admin/faqs/index', $data);

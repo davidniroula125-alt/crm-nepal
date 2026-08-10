@@ -17,16 +17,15 @@ class Testimonials extends BaseController
     {
         $published = $this->request->getGet('published');
 
-        $builder = $this->model->builder();
-        $builder->orderBy('sort_order', 'ASC')->orderBy('id', 'DESC');
+        $builder = $this->model->orderBy('sort_order', 'ASC')->orderBy('id', 'DESC');
 
         if ($published !== null && $published !== '') {
-            $builder->where('is_published', (int) $published);
+            $builder = $builder->where('is_published', (int) $published);
         }
 
         $data['testimonials']    = $builder->paginate(20);
         $data['pager']           = $this->model->pager;
-        $data['total']           = $this->model->countAll();
+        $data['total']           = $this->model->countAllResults();
         $data['currentPublished'] = $published ?? '';
 
         return view('admin/testimonials/index', $data);

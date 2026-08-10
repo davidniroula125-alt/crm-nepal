@@ -57,6 +57,8 @@ class LeadModel extends Model
      */
     public function getLeadsFiltered(array $filters, int $perPage = 20): array
     {
+        $page = max(1, (int) ($filters['page'] ?? 1));
+
         $builder = $this->select('leads.*, users.name as assigned_to_name')
             ->join('users', 'users.id = leads.assigned_to', 'left');
 
@@ -88,13 +90,13 @@ class LeadModel extends Model
         $builder->orderBy('leads.id', 'DESC');
 
         $total = $builder->countAllResults(false);
-        $leads = $builder->paginate($perPage, 'default', $perPage * (max(1, $this->request->getVar('page') ?? 1) - 1));
+        $leads = $builder->paginate($perPage);
 
         return [
             'leads'       => $leads,
             'total'       => $total,
             'perPage'     => $perPage,
-            'currentPage' => (int) ($this->request->getVar('page') ?? 1),
+            'currentPage' => $page,
         ];
     }
 }
